@@ -13,7 +13,7 @@ public class EinAusgabe {
 
 	private static Scanner sc = new Scanner(System.in);
 
-	public void scannerSchliessen() {
+	public static void scannerSchliessen() {
 		sc.close();
 	}
 
@@ -74,6 +74,7 @@ public class EinAusgabe {
 		}
 	}
 
+	// TODO hier nochmal richtig formatierte Double zurueck geben.
 	public static double eingabeDouble(String aufforderung) throws InputMismatchException {
 		double auswahl;
 		while (true) {

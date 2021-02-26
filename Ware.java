@@ -8,7 +8,7 @@ public abstract class Ware {
 	private boolean imBestand;
 	private LocalDate anlegedatum;
 
-	public static final int WARENLIMIT = 30;
+	public static final int WARENLIMIT = 2;
 	// wie viele Bestellungen pro spezieller Ware gleichzeitig eingelagert sein koennen.
 	public static final int LIMITBESTELLUNGEN = 20;
 	public static final int LAGERKAPAZITAET = 100;

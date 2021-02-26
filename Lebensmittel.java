@@ -12,9 +12,9 @@ import java.time.Period;
 
 public class Lebensmittel extends Ware {
 
-	private double gewicht;
-	private int haltbarkeit;
-	private boolean bedarfKuehlung;
+	protected double gewicht;
+	protected int haltbarkeit;
+	protected boolean bedarfKuehlung;
 
 	// Insgesamt X verschiedene Arten und X gleichzeitig gelagerte Bestellungen pro Ware moeglich.
 	private static Lebensmittel datenLebensmittel[][] = new Lebensmittel[WARENLIMIT][LIMITBESTELLUNGEN];
@@ -57,11 +57,12 @@ public class Lebensmittel extends Ware {
 		return datenLebensmittel;
 	}
 
+	/*
 	// TODO testen fuer Backware
-	/** Getter*/
 	public double getGewicht() { return this.gewicht; }
 	public int getHaltbarkeit() { return this.haltbarkeit; }
 	public boolean getBedarfKuehlung() { return this.bedarfKuehlung; }
+	*/
 
 	public String haltbarBis() {
 		LocalDate mhd = this.getAnlegedatum().plusDays(this.haltbarkeit);
@@ -73,7 +74,7 @@ public class Lebensmittel extends Ware {
 	 * @return Differenz der Tage als Integer. -1, falls ein ueberschritten
 	 */
 	public int istHaltbar() {
-		LocalDate mhd = this.getAnlegedatum().plusDays(haltbarkeit);
+		LocalDate mhd = this.getAnlegedatum().plusDays(this.haltbarkeit);
 		int tageDifferenz = Period.between(LocalDate.now(), mhd).getDays();
 		// laut Aufgabenstellung soll immer -1 bei negativen Werten 
 		// zurueck gegeben werden und nicht -2, -3, ... 
