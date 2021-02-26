@@ -335,7 +335,9 @@ public class Supermarkt {
 					break;
 				System.out.println("\nDie Haltbarkeit muss groesser als 0 sein!");
 			}
-			boolean kuehlung =  EinAusgabe.eingabeBoolean("Ist eine Kuehlung notwendig? (Gleitkommazahl moeglich)");
+			boolean kuehlung =  EinAusgabe.eingabeBoolean("Ist eine Kuehlung notwendig? Format = true / false");
+			// trigger auf false setzen, damit nicht auch ein Lebensmittel-Objekt erstellt wird.
+			Lebensmittel.setTrigger(false);
 			// neue Backware erstellen.
 			new Backware(name, preis, gewicht, haltbarkeit, kuehlung);
 		}
@@ -717,7 +719,7 @@ public class Supermarkt {
 
 	public static void main(String[] args) {
 
-		Backware x = new Backware("test", 2, 3, 4, true);
+		//Backware x = new Backware("test", 2, 3, 4, true);
 		//System.out.println(x.istHaltbar());
 
 		/*

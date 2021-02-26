@@ -12,6 +12,7 @@ import java.time.Period;
 
 public class Lebensmittel extends Ware {
 
+	// TODO private?
 	protected double gewicht;
 	protected int haltbarkeit;
 	protected boolean bedarfKuehlung;
@@ -19,24 +20,35 @@ public class Lebensmittel extends Ware {
 	// Insgesamt X verschiedene Arten und X gleichzeitig gelagerte Bestellungen pro Ware moeglich.
 	private static Lebensmittel datenLebensmittel[][] = new Lebensmittel[WARENLIMIT][LIMITBESTELLUNGEN];
 
+	// Schaltet den Hinzufuege-Vorgang fuer Lebensmittel aus,
+	// sollte der Konstruktor ueber eine erbende Klasse aufgerufen werden.
+	private static boolean trigger = true;
+
+	/** Setter fuer den Trigger, der erbenden Klassen zur Verfuegung steht. */
+	protected static void setTrigger(boolean wert) { trigger = wert; }
+
 	public Lebensmittel(String name, double preis, double gewicht, int haltbarkeit, boolean bedarfKuehlung) {
 		super(EinAusgabe.ersterBuchstabeGross(name), preis);
-		// TODO > 0 check mit Exceptions
 		this.gewicht = gewicht;
 		this.haltbarkeit = haltbarkeit;
 		this.bedarfKuehlung = bedarfKuehlung;
 
-		// Fuegt das neu erstellte Lebensmittel in den ersten freien Array-Slot ein.
-		for (int i=0; i<WARENLIMIT; i++) {
-			if (datenLebensmittel[i][0] != null)
-				continue;
-			datenLebensmittel[i][0] = this;
-			
-			System.out.println();
-			// Maximal Menge direkt bestellen
-			datenLebensmittel[i][0].nachbestellen(LAGERKAPAZITAET);
-			break;
+		if (trigger) {
+			// Fuegt das neu erstellte Lebensmittel in den ersten freien Array-Slot ein.
+			for (int i=0; i<WARENLIMIT; i++) {
+				if (datenLebensmittel[i][0] != null)
+					continue;
+				datenLebensmittel[i][0] = this;
+				
+				System.out.println();
+				// Maximal Menge direkt bestellen
+				datenLebensmittel[i][0].nachbestellen(LAGERKAPAZITAET);
+				break;
+			}
 		}
+		// Trigger zuruecksetzen.
+		trigger = true;
+
 	}
 
 	// Bestellung
@@ -57,8 +69,9 @@ public class Lebensmittel extends Ware {
 		return datenLebensmittel;
 	}
 
-	/*
+
 	// TODO testen fuer Backware
+	/*
 	public double getGewicht() { return this.gewicht; }
 	public int getHaltbarkeit() { return this.haltbarkeit; }
 	public boolean getBedarfKuehlung() { return this.bedarfKuehlung; }

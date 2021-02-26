@@ -47,16 +47,18 @@ public class Backware extends Lebensmittel {
 
 
 	// TODO vererbt!
+	/*
 	public String haltbarBis() {
 		LocalDate mhd = this.getAnlegedatum().plusDays(this.haltbarkeit);
 		return EinAusgabe.datumFormatiert(mhd);
-	}
+	} */
 
 	/**
 	 * Gibt die Anzahl der Tage zwischen jetzt und MHD als Integer zurueck.
 	 * @return Differenz der Tage als Integer. -1, falls ein ueberschritten
 	 */
 	// TODO vererbt!
+	/*
 	public int istHaltbar() {
 		LocalDate mhd = this.getAnlegedatum().plusDays(this.haltbarkeit);
 		int tageDifferenz = Period.between(LocalDate.now(), mhd).getDays();
@@ -66,7 +68,7 @@ public class Backware extends Lebensmittel {
 			return tageDifferenz;
 		else
 			return -1;
-	}
+	} */
 
 	public static Backware[] kurzesMHD() {
 		// Backwaren Array, der zurueck gegeben wird.
@@ -133,6 +135,7 @@ public class Backware extends Lebensmittel {
 	// Aufruf der Methode:
 	// datenBackware[1][0].nachbestellen(20);
 	// TODO vererbt!
+	/*
 	public boolean nachbestellen(int menge) {
 		// Hilfsvariablen
 		int mengeVorBestellung = this.getAnzahl();
@@ -158,7 +161,7 @@ public class Backware extends Lebensmittel {
 			System.out.printf("Es wurden %d Einheiten der Ware %s bestellt.%n", menge, this.getName());
 			return true;
 		}
-	}
+	} */
 
 
 
