@@ -20,8 +20,9 @@ public class Lebensmittel extends Ware {
 	// Insgesamt X verschiedene Arten und X gleichzeitig gelagerte Bestellungen pro Ware moeglich.
 	private static Lebensmittel datenLebensmittel[][] = new Lebensmittel[WARENLIMIT][LIMITBESTELLUNGEN];
 
-	// Schaltet den Hinzufuege-Vorgang fuer Lebensmittel aus,
+	// Schaltet den Hinzufuege-Vorgang zum Array fuer Lebensmittel aus,
 	// sollte der Konstruktor ueber eine erbende Klasse aufgerufen werden.
+	// Sonst haetten wa quasi gleich zwei Waren erstellt. ;)
 	private static boolean trigger = true;
 
 	/** Setter fuer den Trigger, der erbenden Klassen zur Verfuegung steht. */
@@ -68,14 +69,6 @@ public class Lebensmittel extends Ware {
 	public static Lebensmittel[][] getDatenLebensmittel() {
 		return datenLebensmittel;
 	}
-
-
-	// TODO testen fuer Backware
-	/*
-	public double getGewicht() { return this.gewicht; }
-	public int getHaltbarkeit() { return this.haltbarkeit; }
-	public boolean getBedarfKuehlung() { return this.bedarfKuehlung; }
-	*/
 
 	public String haltbarBis() {
 		LocalDate mhd = this.getAnlegedatum().plusDays(this.haltbarkeit);
@@ -138,10 +131,14 @@ public class Lebensmittel extends Ware {
 				datenLebensmittel[i][0].herausgeben(nochZuLoeschen, i);
 			}
 
-			// Ein Lebensmittel erfolgreich durchlaufen, Daten dem Array hinzufuegen.
-			rueckgabeArray[index] = new Lebensmittel(datenLebensmittel[i][0].getName(), anzahl);
-			// Resetten der Hilfsvariable, da jetzt ein neues Lebensmittel durchlaufen wird.
+			if (index >= 0) {
+				// Ein Lebensmittel erfolgreich durchlaufen, Daten dem Array hinzufuegen.
+				rueckgabeArray[index] = new Lebensmittel(datenLebensmittel[i][0].getName(), anzahl);
+			}
+
+			// Resetten der Hilfsvariablen, da jetzt ein neues Lebensmittel durchlaufen wird.
 			anzahl = 0;
+			nochZuLoeschen = 0;
 		}
 		return rueckgabeArray;
 	}
@@ -223,7 +220,7 @@ public class Lebensmittel extends Ware {
 
 			// Menge in dem Haupt-Objekt der Ware aktualisieren;
 			this.setAnzahl(mengeNachHerausgabe);
-			System.out.printf("Es wurden %d Einheiten %s herausgegeben. Das Lager hat nun noch %d Einheiten.%n"
+			System.out.printf("Es wurden %d Einheiten %s entfernt. Das Lager hat nun noch %d Einheiten.%n"
 					, menge, this.getName(), this.getAnzahl());
 		} else {
 			System.out.printf("Es sind nicht mehr genuegend Einheiten %s auf Lager.%n", this.getName());

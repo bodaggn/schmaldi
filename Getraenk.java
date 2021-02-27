@@ -132,7 +132,7 @@ public class Getraenk extends Ware {
 
 			// Menge in dem Haupt-Objekt der Ware aktualisieren;
 			this.setAnzahl(mengeNachHerausgabe);
-			System.out.printf("Es wurden %d Einheiten %s herausgegeben. Das Lager hat nun noch %d Einheiten.%n"
+			System.out.printf("Es wurden %d Einheiten %s entfernt. Das Lager hat nun noch %d Einheiten.%n"
 					, menge, this.getName(), this.getAnzahl());
 		} else {
 			System.out.printf("Es sind nicht mehr genuegend Einheiten %s auf Lager.%n", this.getName());

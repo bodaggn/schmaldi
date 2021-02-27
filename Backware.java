@@ -1,6 +1,3 @@
-import java.time.LocalDate;
-import java.time.Period;
-
 public class Backware extends Lebensmittel {
 
 	private boolean gebacken;
@@ -42,33 +39,17 @@ public class Backware extends Lebensmittel {
 		return datenBackware;
 	}
 
-	// TODO
-	// public boolean backWare() {}
-
-
-	// TODO vererbt!
-	/*
-	public String haltbarBis() {
-		LocalDate mhd = this.getAnlegedatum().plusDays(this.haltbarkeit);
-		return EinAusgabe.datumFormatiert(mhd);
-	} */
-
-	/**
-	 * Gibt die Anzahl der Tage zwischen jetzt und MHD als Integer zurueck.
-	 * @return Differenz der Tage als Integer. -1, falls ein ueberschritten
-	 */
-	// TODO vererbt!
-	/*
-	public int istHaltbar() {
-		LocalDate mhd = this.getAnlegedatum().plusDays(this.haltbarkeit);
-		int tageDifferenz = Period.between(LocalDate.now(), mhd).getDays();
-		// laut Aufgabenstellung soll immer -1 bei negativen Werten 
-		// zurueck gegeben werden und nicht -2, -3, ... 
-		if (tageDifferenz >= 0)
-			return tageDifferenz;
-		else
-			return -1;
-	} */
+	public boolean backeWare() {
+		// bereits gebacken.
+		if (this.gebacken) {
+			System.out.printf("Die komplette Ware %s ist bereits aufgebacken.", this.getName());
+			return false;
+		// noch nicht gebacken.
+		} else {
+			System.out.printf("Die Ware %s wird aufgebacken. Einen Moment bitte.", this.getName());
+			return true;
+		}
+	}
 
 	public static Backware[] kurzesMHD() {
 		// Backwaren Array, der zurueck gegeben wird.
@@ -108,13 +89,18 @@ public class Backware extends Lebensmittel {
 			// Alle abgelaufenen Bestellungen der Ware herausgeben / loeschen.
 			if (nochZuLoeschen > 0) {
 				System.out.println();
-				datenBackware[i][0].herausgeben(nochZuLoeschen, i);
+				// false Parameter gibt an, dass hier nicht geprueft werden soll, dass aufgebacken ist.
+				datenBackware[i][0].herausgeben(nochZuLoeschen, i, false);
 			}
 
-			// Eine Backware erfolgreich durchlaufen, Daten dem Array hinzufuegen.
-			rueckgabeArray[index] = new Backware(datenBackware[i][0].getName(), anzahl);
-			// Resetten der Hilfsvariable, da jetzt eine neue Backware durchlaufen wird.
+			if (index >= 0) {
+				// Eine Backware erfolgreich durchlaufen, Daten dem Array hinzufuegen.
+				rueckgabeArray[index] = new Backware(datenBackware[i][0].getName(), anzahl);
+			}
+
+			// Resetten der Hilfsvariablen, da jetzt eine neue Backware durchlaufen wird.
 			anzahl = 0;
+			nochZuLoeschen = 0;
 		}
 		return rueckgabeArray;
 	}
@@ -132,44 +118,11 @@ public class Backware extends Lebensmittel {
 		return counter-1;
 	}
 
-	// Aufruf der Methode:
-	// datenBackware[1][0].nachbestellen(20);
-	// TODO vererbt!
-	/*
-	public boolean nachbestellen(int menge) {
-		// Hilfsvariablen
-		int mengeVorBestellung = this.getAnzahl();
-		int mengeNachBestellung = this.getAnzahl() + menge;
-
-		if (mengeVorBestellung >= 100) {
-			// Lager bereits voll.
-			System.out.printf("Das Lager hat bereits %d Einheiten %s und ist somit voll.%n"
-					, LAGERKAPAZITAET, this.getName());
-			return false;
-		} else if (mengeNachBestellung > LAGERKAPAZITAET) {
-			// Bestellmenge + bereits vorhanden ueberschreitet Kapazitaet.
-			int angepassteBestellung = LAGERKAPAZITAET - mengeVorBestellung;
-			System.out.printf("Das Lager hat bereits %d Einheiten %s. Es wurden nur %d Einheiten bestellt.%n"
-					, mengeVorBestellung, this.getName(), angepassteBestellung);
-			this.bestellungHinzufuegen(angepassteBestellung);
-			this.setAnzahl(LAGERKAPAZITAET);
-			return true;
-		} else {
-			// Bestellmenge in Ordnung.
-			this.setAnzahl(mengeNachBestellung);
-			this.bestellungHinzufuegen(menge);
-			System.out.printf("Es wurden %d Einheiten der Ware %s bestellt.%n", menge, this.getName());
-			return true;
-		}
-	} */
-
-
 
 	/**
 	 * Erstellt ein neues Bestell-Objekt und reiht es an der richtigen Stelle
 	 * im zwei-dimensionalen Backwaren-Array ein.
 	 */
-	// TODO: Check, falls alle Slots frei sind einbauen?
 	@Override
 	public void bestellungHinzufuegen(int menge) {
 		// Hilfsvariablen
@@ -192,8 +145,20 @@ public class Backware extends Lebensmittel {
 		}
 	}
 
-	@Override
-	public boolean herausgeben(int menge, int slot) {
+	public boolean herausgeben(int menge, int slot, boolean aufbackenPruefen) {
+
+		// Folgende Abfrage ueberspringen, wenn Aufbacken-Ueberpruefung nicht gewuenscht.
+		if (aufbackenPruefen) {
+			// Prueft, ob die gesamte spezielle Backware vor Verkauf noch aufgebacken werden muss.
+			if (this.backeWare()) {
+				// TODO Wartezeit aufbacken simulieren
+				System.out.printf("Alle Einheiten der Ware %s wurden erfolgreich aufgebacken. Verkauf fortgesetzt.%n"
+						, this.getName());
+			} else
+				System.out.printf("Alle Einheiten der Ware %s sind bereits erfolgreich aufgebacken. Verkauf fortgesetzt.%n"
+						, this.getName());
+		}
+
 		int mengeVorHerausgabe = this.getAnzahl();
 		int mengeNachHerausgabe = this.getAnzahl() - menge;
 
@@ -201,7 +166,7 @@ public class Backware extends Lebensmittel {
 
 			// Menge in dem Haupt-Objekt der Ware aktualisieren;
 			this.setAnzahl(mengeNachHerausgabe);
-			System.out.printf("Es wurden %d Einheiten %s herausgegeben. Das Lager hat nun noch %d Einheiten.%n"
+			System.out.printf("Es wurden %d Einheiten %s entfernt. Das Lager hat nun noch %d Einheiten.%n"
 					, menge, this.getName(), this.getAnzahl());
 		} else {
 			System.out.printf("Es sind nicht mehr genuegend Einheiten %s auf Lager.%n", this.getName());

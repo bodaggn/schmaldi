@@ -8,9 +8,11 @@ public abstract class Ware {
 	private boolean imBestand;
 	private LocalDate anlegedatum;
 
-	public static final int WARENLIMIT = 2;
+	// wie viele spezielle Waren pro Abteilung gleichzeitig angelegt sein koennen.
+	public static final int WARENLIMIT = 30;
 	// wie viele Bestellungen pro spezieller Ware gleichzeitig eingelagert sein koennen.
 	public static final int LIMITBESTELLUNGEN = 20;
+	// wie viel Lagerplatz pro spezieller Ware pro Abteilung existiert.
 	public static final int LAGERKAPAZITAET = 100;
 
 	private static long bestellnummer = 1; 
@@ -54,7 +56,7 @@ public abstract class Ware {
 	public void setAnzahl(int anzahl) { this.anzahl = anzahl; }
 
 
-//	public abstract boolean nachbestellen(int menge);
+	public abstract boolean nachbestellen(int menge);
 
-//	public abstract boolean herausgeben(int menge); 
+	public abstract boolean herausgeben(int menge, int slot); 
 }

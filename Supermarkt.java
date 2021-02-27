@@ -19,16 +19,14 @@ public class Supermarkt {
 	private static final int AUSWAHLANZAHLHAUPTMENUE = AuswahlHauptmenue.values().length;
 
 	// TODO
-	private static final String MARKTNAME = "Schmaldi";
+	private static String marktname;
 
-	// TODO gilt das als sinnvoll? :D
 	public enum AuswahlHauptmenue {
 		BEENDEN,
 		LEBENSMITTEL,
 		GETRAENKE,
 		NONFOOD,
-		BACKWAREN,
-		LAGER
+		BACKWAREN
 	}
 
 	public static void trennleiste(String inhalt) {
@@ -48,6 +46,7 @@ public class Supermarkt {
 		trennleiste("Login");
 		System.out.println("Willkommen!\nBitte logge dich ein.");
 		//TODO masked password account, md5 file for fun? 
+		Lager.erstelleLager();
 		hauptmenue();
 	}
 
@@ -56,18 +55,16 @@ public class Supermarkt {
 		System.out.println("Bitte waehle die Abteilung aus.");
 		// Gibt die Enum Elemente als korrekt formatierte Auswahlmoeglichkeiten aus.
 		for (int i = 0; i < AUSWAHLANZAHLHAUPTMENUE; i++) {
-			System.out.printf("(%d) %s%n", i
-					, EinAusgabe.ersterBuchstabeGross(AuswahlHauptmenue.values()[i].name()));
+			System.out.printf("(%d) %s%n"
+					, i , EinAusgabe.ersterBuchstabeGross(AuswahlHauptmenue.values()[i].name()));
 		}
 
-		// Das hier in aktionHauptmenue umbenennen
 		// User-Input
 		int input = EinAusgabe.auswahlTreffen(4);
 		// Nachfolgendes Untermenue anhand der Auswahl aufrufen.
 		switch(input) {
 			case 0:
 				beenden();
-				break;
 			case 1:
 				untermenueStandard("Lebensmittel");
 				break;
@@ -283,7 +280,7 @@ public class Supermarkt {
 					break;
 				System.out.println("\nDie Haltbarkeit muss groesser als 0 sein!");
 			}
-			boolean kuehlung =  EinAusgabe.eingabeBoolean("Ist eine Kuehlung notwendig? (Gleitkommazahl moeglich)");
+			boolean kuehlung =  EinAusgabe.eingabeBoolean("Ist eine Kuehlung notwendig? Format = true / false");
 			// neues Lebensmittel erstellen.
 			new Lebensmittel(name, preis, gewicht, haltbarkeit, kuehlung);
 		}
@@ -334,19 +331,20 @@ public class Supermarkt {
 				if (haltbarkeit > 0)
 					break;
 				System.out.println("\nDie Haltbarkeit muss groesser als 0 sein!");
-			}
+			
 			boolean kuehlung =  EinAusgabe.eingabeBoolean("Ist eine Kuehlung notwendig? Format = true / false");
 			// trigger auf false setzen, damit nicht auch ein Lebensmittel-Objekt erstellt wird.
 			Lebensmittel.setTrigger(false);
 			// neue Backware erstellen.
 			new Backware(name, preis, gewicht, haltbarkeit, kuehlung);
-		}
+			}
 
 		// TODO hier Ladezeit mit Rekursion simulieren.
 		System.out.printf("%nNeues %s %s erfolgreich angelegt.%n", abteilung, name);
 		// Zurueck zur Abteilung.
 		EinAusgabe.mitEnterBestaetigen();
 		untermenueStandard(abteilung);
+		}
 	}
 
 	// Punkt 2
@@ -668,7 +666,18 @@ public class Supermarkt {
 			untermenueStandard(abteilung);
 		}
 
-		int menge = EinAusgabe.eingabeInt("Wie viele Einheiten sollen verkauft werden?");
+		// Herausgabeversuch von einer Menge groesser als der Lagerkapazitaet direkt beanstanden.
+		int menge;
+		while (true) {
+			menge = EinAusgabe.eingabeInt("Wie viele Einheiten sollen verkauft werden?");
+			if (menge <= Ware.LAGERKAPAZITAET)
+				break;
+			else  {
+				System.out.printf("%nDie maximale Kapazitaet pro Ware betraegt %d.%n", Ware.LAGERKAPAZITAET);
+				System.out.println("Bitte Logik anwenden und erneut versuchen.");
+				// Ein bisschen passive Aggressivitaet tut immer gut!
+			}
+		}
 		// Leerzeile
 		System.out.println();
 
@@ -699,7 +708,7 @@ public class Supermarkt {
 		else if (abteilung == "Backwaren") {
 			Backware[][] daten = Backware.getDatenBackware(); 
 			// Herausgeben-Funktion aus der Klasse Backware auf die ausgewaehlte Backware anwenden.
-			if (daten[input-1][0].herausgeben(menge, input-1))
+			if (daten[input-1][0].herausgeben(menge, input-1, true))
 					System.out.println("Verkauf erfolgreich im System gespeichert.");
 				else
 					System.out.println("Verkauf voerst abgebrochen. Bitte erneut versuchen.");
@@ -719,12 +728,10 @@ public class Supermarkt {
 
 	public static void main(String[] args) {
 
-		//Backware x = new Backware("test", 2, 3, 4, true);
 		//System.out.println(x.istHaltbar());
 
-		/*
-		Lebensmittel a = new Lebensmittel("Banane", 1.20, 0.5, -1, false);
-		Lebensmittel[][] temp = Lebensmittel.getDatenLebensmittel();
+		//Lebensmittel a = new Lebensmittel("Banane", 1.20, 0.5, -1, false);
+		/*Lebensmittel[][] temp = Lebensmittel.getDatenLebensmittel();
 		temp[0][0].herausgeben(40,0);
 		temp[0][0].nachbestellen(30);
 		*/
