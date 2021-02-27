@@ -68,6 +68,7 @@ public class Supermarkt {
 	}
 
 	public static void hauptmenue() {
+		EinAusgabe.clearScreen();
 		trennleiste("Hauptmenue");
 		System.out.println("Bitte waehle die Abteilung aus.");
 		// Gibt die Enum Elemente als korrekt formatierte Auswahlmoeglichkeiten aus.
@@ -99,6 +100,7 @@ public class Supermarkt {
 
 	public static void untermenueStandard(String abteilung) {
 		int input;
+		EinAusgabe.clearScreen();
 		trennleiste(String.format("Abteilung: %s", abteilung));
 		System.out.println("(0) Zurueck");
 		System.out.println("(1) Anlegen");
@@ -118,7 +120,7 @@ public class Supermarkt {
 			hauptmenue();
 
 		//trennleiste(String.format("Abteilung: %s", abteilung));
-
+		EinAusgabe.clearScreen();
 		// naechsten Optionen darlegen und Userauswahl aufnehmen,
 		// z.B. welche Waren will ich anlegen, bestellen, anzeigen, etc.
 		int auswahl;
@@ -264,6 +266,7 @@ public class Supermarkt {
 
 	// Punkt 1
 	public static void neuAnlegen(String abteilung) {
+		EinAusgabe.clearScreen();
 		System.out.println("Hier kannst du neue Ware in das Sortiment aufnehmen.");
 
 		// Falls Warenlimit fuer die Abteilung erreicht ist.
@@ -366,7 +369,7 @@ public class Supermarkt {
 		if (input == 0) {
 			untermenueStandard(abteilung);
 		}
-
+		EinAusgabe.clearScreen();
 		// alle Waren ausgewaehlt.
 		if (input == 1)
 			System.out.println("\nFuer genauere Informationen bitte die jeweilige Ware auswaehlen.\n");
@@ -563,14 +566,13 @@ public class Supermarkt {
 		aktionUntermenue(2, abteilung);
 	}
 
-
 	//Punkt 3
 	public static void nachbestellenWare(String abteilung, int input) {
 
 		if (input == 0) {
 			untermenueStandard(abteilung);
 		}
-
+		EinAusgabe.clearScreen();
 		int menge;
 		while (true) {
 			menge = EinAusgabe.eingabeInt("Wie viel moechtest du bestellen?");
@@ -679,7 +681,7 @@ public class Supermarkt {
 		if (input == 0) {
 			untermenueStandard(abteilung);
 		}
-
+		EinAusgabe.clearScreen();
 		// Herausgabeversuch von einer Menge groesser als der Lagerkapazitaet direkt beanstanden.
 		int menge;
 		while (true) {

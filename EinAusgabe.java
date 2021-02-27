@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -122,5 +123,14 @@ public class EinAusgabe {
 		DateTimeFormatter f = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
 		return f.format(datum);
     }
+	public static void clearScreen(){
+		//Clears Screen in java
+		try {
+			if (System.getProperty("os.name").contains("Windows"))
+				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+			else
+				System.out.print("\033\143");
+		} catch (IOException | InterruptedException ex) {}
+	}
 
 }
