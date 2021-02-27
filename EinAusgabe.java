@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -108,7 +109,7 @@ public class EinAusgabe {
 	}
 
 	public static void mitEnterBestaetigen() {
-		System.out.print("\nMit \"Enter\" bestaetigen um zurueck zukehren.");
+		System.out.print("\nMit \"Enter\" bestaetigen ...");
 		// gleich zwei mal, weil es so schoen ist. Nein, der Buffer muss erst geleert werden.
 		sc.nextLine();
 		sc.nextLine();
@@ -122,5 +123,14 @@ public class EinAusgabe {
 		DateTimeFormatter f = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
 		return f.format(datum);
     }
+	public static void clearScreen(){
+		//Clears Screen in java
+		try {
+			if (System.getProperty("os.name").contains("Windows"))
+				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+			else
+				System.out.print("\033\143");
+		} catch (IOException | InterruptedException ex) {}
+	}
 
 }
