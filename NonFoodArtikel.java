@@ -16,9 +16,8 @@ public class NonFoodArtikel extends Ware {
 				continue;
 			datenNonFoodArtikel[i][0] = this;
 			
-			System.out.println();
 			// Maximal Menge direkt bestellen
-			datenNonFoodArtikel[i][0].nachbestellen(LAGERKAPAZITAET);
+			datenNonFoodArtikel[i][0].nachbestellen(LAGERKAPAZITAET, false);
 			break;
 		}
 	}
@@ -48,10 +47,7 @@ public class NonFoodArtikel extends Ware {
 		return counter-1;
 	}
 
-
-
-	// datenNonFoodArtikel[1][0].nachbestellen(20);
-	public boolean nachbestellen(int menge) {
+	public boolean nachbestellen(int menge, boolean laut) {
 		// Hilfsvariablen
 		int mengeVorBestellung = this.getAnzahl();
 		int mengeNachBestellung = this.getAnzahl() + menge;
@@ -73,7 +69,8 @@ public class NonFoodArtikel extends Ware {
 			// Bestellmenge in Ordnung.
 			this.setAnzahl(mengeNachBestellung);
 			this.bestellungHinzufuegen(menge);
-			System.out.printf("Es wurden %d Einheiten der Ware %s bestellt.%n", menge, this.getName());
+			if (laut)
+				System.out.printf("Es wurden %d Einheiten der Ware %s bestellt.%n", menge, this.getName());
 			return true;
 		}
 	}
@@ -102,8 +99,6 @@ public class NonFoodArtikel extends Ware {
 		}
 	}
 
-
-
 	public boolean herausgeben(int menge, int slot) {
 		int mengeVorHerausgabe = this.getAnzahl();
 		int mengeNachHerausgabe = this.getAnzahl() - menge;
@@ -121,7 +116,7 @@ public class NonFoodArtikel extends Ware {
 						+ "Ja / Nein" , this.getName(), LAGERKAPAZITAET));
 			System.out.println();
 			if (antwort.toLowerCase().startsWith("j"))
-				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe);
+				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe, false);
 			return false;
 		}
 

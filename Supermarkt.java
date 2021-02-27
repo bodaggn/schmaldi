@@ -282,6 +282,7 @@ public class Supermarkt {
 			}
 			boolean kuehlung =  EinAusgabe.eingabeBoolean("Ist eine Kuehlung notwendig? Format = true / false");
 			// neues Lebensmittel erstellen.
+			Lebensmittel.setTrigger(true);
 			new Lebensmittel(name, preis, gewicht, haltbarkeit, kuehlung);
 		}
 
@@ -339,12 +340,12 @@ public class Supermarkt {
 			new Backware(name, preis, gewicht, haltbarkeit, kuehlung);
 			}
 
+		}
 		// TODO hier Ladezeit mit Rekursion simulieren.
 		System.out.printf("%nNeues %s %s erfolgreich angelegt.%n", abteilung, name);
 		// Zurueck zur Abteilung.
 		EinAusgabe.mitEnterBestaetigen();
 		untermenueStandard(abteilung);
-		}
 	}
 
 	// Punkt 2
@@ -578,14 +579,14 @@ public class Supermarkt {
 			if (input == 1) {
 				for (int i=0; i<Lebensmittel.WARENLIMIT; i++) {
 					try {
-						daten[i][0].nachbestellen(menge);
+						daten[i][0].nachbestellen(menge, true);
 					} catch (NullPointerException e) {
 						continue;
 					} 
 				}
 			} else {
 				// Funktion aufrufen und return-Wert als Bestellstatus interpretieren.
-				if (daten[input-2][0].nachbestellen(menge))
+				if (daten[input-2][0].nachbestellen(menge, true))
 					System.out.println("\nBestellung erfolgreich im System gespeichert.");
 				else
 					System.out.println("\nBestellung abgebrochen.");
@@ -599,14 +600,14 @@ public class Supermarkt {
 			if (input == 1) {
 				for (int i=0; i<Getraenk.WARENLIMIT; i++) {
 					try {
-						daten[i][0].nachbestellen(menge);
+						daten[i][0].nachbestellen(menge, true);
 					} catch (NullPointerException e) {
 						continue;
 					} 
 				}
 			} else {
 				// Funktion aufrufen und return-Wert als Bestellstatus interpretieren.
-				if (daten[input-2][0].nachbestellen(menge))
+				if (daten[input-2][0].nachbestellen(menge, true))
 					System.out.println("\nBestellung erfolgreich im System gespeichert.");
 				else
 					System.out.println("\nBestellung abgebrochen.");
@@ -620,14 +621,14 @@ public class Supermarkt {
 			if (input == 1) {
 				for (int i=0; i<NonFoodArtikel.WARENLIMIT; i++) {
 					try {
-						daten[i][0].nachbestellen(menge);
+						daten[i][0].nachbestellen(menge, true);
 					} catch (NullPointerException e) {
 						continue;
 					} 
 				}
 			} else {
 				// Funktion aufrufen und return-Wert als Bestellstatus interpretieren.
-				if (daten[input-2][0].nachbestellen(menge))
+				if (daten[input-2][0].nachbestellen(menge, true))
 					System.out.println("\nBestellung erfolgreich im System gespeichert.");
 				else
 					System.out.println("\nBestellung abgebrochen.");
@@ -641,14 +642,14 @@ public class Supermarkt {
 			if (input == 1) {
 				for (int i=0; i<Backware.WARENLIMIT; i++) {
 					try {
-						daten[i][0].nachbestellen(menge);
+						daten[i][0].nachbestellen(menge, true);
 					} catch (NullPointerException e) {
 						continue;
 					} 
 				}
 			} else {
 				// Funktion aufrufen und return-Wert als Bestellstatus interpretieren.
-				if (daten[input-2][0].nachbestellen(menge))
+				if (daten[input-2][0].nachbestellen(menge, true))
 					System.out.println("\nBestellung erfolgreich im System gespeichert.");
 				else
 					System.out.println("\nBestellung abgebrochen.");
@@ -719,31 +720,12 @@ public class Supermarkt {
 		aktionUntermenue(4, abteilung);
 	}
 
-
-
-
 	/* ---------------------------- */
 	/* ------ Main-Funktion ------ */
 	/* -------------------------- */
 
 	public static void main(String[] args) {
-
-		//System.out.println(x.istHaltbar());
-
-		//Lebensmittel a = new Lebensmittel("Banane", 1.20, 0.5, -1, false);
-		/*Lebensmittel[][] temp = Lebensmittel.getDatenLebensmittel();
-		temp[0][0].herausgeben(40,0);
-		temp[0][0].nachbestellen(30);
-		*/
-	
-		//Getraenk b = new Getraenk("Wasser", 1.43123, 0);
-		//Getraenk c = new Getraenk("Alster", 1.43123, 3);
-
-		//NonFoodArtikel d = new NonFoodArtikel("Shirt", 1.23, "Dingens zum Anziehen", "Kleidung");
-
-		//Lebensmittel b = new Lebensmittel("Canane", 1.20, 1.5, 7, false);
-		//System.out.println(b.nachbestellen(53));
+		// Start des Engine
 		einloggen();
-		//Lebensmittel.ausgebenAlles();
 	}
 }

@@ -41,9 +41,8 @@ public class Lebensmittel extends Ware {
 					continue;
 				datenLebensmittel[i][0] = this;
 				
-				System.out.println();
 				// Maximal Menge direkt bestellen
-				datenLebensmittel[i][0].nachbestellen(LAGERKAPAZITAET);
+				datenLebensmittel[i][0].nachbestellen(LAGERKAPAZITAET, false);
 				break;
 			}
 		}
@@ -156,9 +155,7 @@ public class Lebensmittel extends Ware {
 		return counter-1;
 	}
 
-	// Aufruf der Methode:
-	// datenLebensmittel[1][0].nachbestellen(20);
-	public boolean nachbestellen(int menge) {
+	public boolean nachbestellen(int menge, boolean laut) {
 		// Hilfsvariablen
 		int mengeVorBestellung = this.getAnzahl();
 		int mengeNachBestellung = this.getAnzahl() + menge;
@@ -180,7 +177,10 @@ public class Lebensmittel extends Ware {
 			// Bestellmenge in Ordnung.
 			this.setAnzahl(mengeNachBestellung);
 			this.bestellungHinzufuegen(menge);
-			System.out.printf("Es wurden %d Einheiten der Ware %s bestellt.%n", menge, this.getName());
+			// wird von der Klasse Lager auf "leise" gesetzt,
+			// sodass man beim Start des Programms nicht vollgespammt wird.
+			if (laut)
+				System.out.printf("Es wurden %d Einheiten der Ware %s bestellt.%n", menge, this.getName());
 			return true;
 		}
 	}
@@ -229,7 +229,7 @@ public class Lebensmittel extends Ware {
 						+ "Ja / Nein" , this.getName(), LAGERKAPAZITAET));
 			System.out.println();
 			if (antwort.toLowerCase().startsWith("j"))
-				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe);
+				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe, true);
 			return false;
 		}
 

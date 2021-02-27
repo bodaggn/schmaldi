@@ -15,9 +15,9 @@ public class Backware extends Lebensmittel {
 				continue;
 			datenBackware[i][0] = this;
 			
-			System.out.println();
+			// TODO das hier weg System.out.println();
 			// Maximal Menge direkt bestellen
-			datenBackware[i][0].nachbestellen(LAGERKAPAZITAET);
+			datenBackware[i][0].nachbestellen(LAGERKAPAZITAET, false);
 			break;
 		}
 	}
@@ -175,7 +175,7 @@ public class Backware extends Lebensmittel {
 						+ "Ja / Nein" , this.getName(), LAGERKAPAZITAET));
 			System.out.println();
 			if (antwort.toLowerCase().startsWith("j"))
-				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe);
+				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe, true);
 			return false;
 		}
 

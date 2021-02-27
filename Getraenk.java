@@ -15,9 +15,8 @@ public class Getraenk extends Ware {
 				continue;
 			datenGetraenk[i][0] = this;
 			
-			System.out.println();
 			// Maximal Menge direkt bestellen
-			datenGetraenk[i][0].nachbestellen(LAGERKAPAZITAET);
+			datenGetraenk[i][0].nachbestellen(LAGERKAPAZITAET, false);
 			break;
 		}
 	}
@@ -70,8 +69,7 @@ public class Getraenk extends Ware {
 		return counter-1;
 	}
 
-	// datenGetraenk[1][0].nachbestellen(20);
-	public boolean nachbestellen(int menge) {
+	public boolean nachbestellen(int menge, boolean laut) {
 		// Hilfsvariablen
 		int mengeVorBestellung = this.getAnzahl();
 		int mengeNachBestellung = this.getAnzahl() + menge;
@@ -93,7 +91,8 @@ public class Getraenk extends Ware {
 			// Bestellmenge in Ordnung.
 			this.setAnzahl(mengeNachBestellung);
 			this.bestellungHinzufuegen(menge);
-			System.out.printf("Es wurden %d Einheiten der Ware %s bestellt.%n", menge, this.getName());
+			if (laut)
+				System.out.printf("Es wurden %d Einheiten der Ware %s bestellt.%n", menge, this.getName());
 			return true;
 		}
 	}
@@ -141,7 +140,7 @@ public class Getraenk extends Ware {
 						+ "Ja / Nein" , this.getName(), LAGERKAPAZITAET));
 			System.out.println();
 			if (antwort.toLowerCase().startsWith("j"))
-				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe);
+				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe, true);
 			return false;
 		}
 

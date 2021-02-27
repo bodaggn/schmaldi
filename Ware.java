@@ -56,7 +56,7 @@ public abstract class Ware {
 	public void setAnzahl(int anzahl) { this.anzahl = anzahl; }
 
 
-	public abstract boolean nachbestellen(int menge);
+	public abstract boolean nachbestellen(int menge, boolean laut);
 
 	public abstract boolean herausgeben(int menge, int slot); 
 }
