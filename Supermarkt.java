@@ -44,9 +44,23 @@ public class Supermarkt {
 
 	public static void einloggen() {
 		trennleiste("Login");
-		System.out.println("Willkommen!\nBitte logge dich ein.");
-		//TODO masked password account, md5 file for fun? 
-		Lager.erstelleLager();
+		System.out.println("Willkommen!\nBitte logge dich ein.\n");
+
+		// User um Auswahl der Testwarenanzahl bitten.
+		System.out.println("Moechtest du sporadisch benannte Testware importieren?");
+		System.out.printf("Wenn Ja, dann gib bitte die gewuenschte Anzahl bis max. %d an.%n", Ware.WARENLIMIT);
+		System.out.println("Wenn Nein, dann gib bitte die \"0\" an.");
+		int anzahlTestWare;
+		while (true) {
+			anzahlTestWare = EinAusgabe.eingabeInt("Bitte waehle aus:");
+			if (anzahlTestWare < 0 || anzahlTestWare > Ware.WARENLIMIT)
+				System.out.printf("%nAuswahl nicht zwischen 0 und %d.%n", Ware.WARENLIMIT);
+			else 
+				break;
+		}
+
+		// Test-Waren anhand der User-Auswahl erstellen
+		Lager.erstelleLager(anzahlTestWare);
 		hauptmenue();
 	}
 
@@ -342,7 +356,8 @@ public class Supermarkt {
 
 		}
 		// TODO hier Ladezeit mit Rekursion simulieren.
-		System.out.printf("%nNeues %s %s erfolgreich angelegt.%n", abteilung, name);
+		System.out.printf("%nNeues %s %s erfolgreich angelegt und automatisch %d Einheiten bestellt.%n"
+				, abteilung, name, Ware.LAGERKAPAZITAET);
 		// Zurueck zur Abteilung.
 		EinAusgabe.mitEnterBestaetigen();
 		untermenueStandard(abteilung);

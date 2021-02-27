@@ -11,7 +11,7 @@ import java.util.InputMismatchException;
  */
 public class EinAusgabe {
 
-	private static Scanner sc = new Scanner(System.in);
+	private static Scanner sc = new Scanner(System.in).useDelimiter(System.lineSeparator());
 
 	public static void scannerSchliessen() {
 		sc.close();

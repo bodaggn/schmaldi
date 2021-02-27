@@ -1,8 +1,6 @@
 // TODO erklaeren, dass hier Haltbarkeit -1 moeglich ist
 public class Lager {
 
-	private static final int ANZAHLWAREN = 10;
-
 	/**
 	 * Erstellt jeweils eine bestimmte Anzahl Waren fuer jede Abteilung.
 	 * Die Namen laufen nach folgendem Schema:
@@ -12,20 +10,20 @@ public class Lager {
 	 * Zu Testzwecken werden auch negative Haltbarkeiten erstellt, die ansonsten bei der User-Eingabe
 	 * abgefangen werden. Hierdurch lassen sich die Mindesthalbarkeits-Methoden testen.
 	 */
-	public static void erstelleLager() {
+	public static void erstelleLager(int anzahlWaren) {
 		String name, beschreibung, untergruppe;
 		double preis, gewicht;
 		int haltbarkeit, alkoholgehalt;
 		boolean bedarfKuehlung;
 
 		// Test-Lebensmittel erstellen.
-		for (int i=1; i<=ANZAHLWAREN; i++) {
+		for (int i=1; i<=anzahlWaren; i++) {
 			// Trigger auf true, damit ein neues Lebensmittel-Objekt in das Array eingefuegt wird.
 			// Bei der Backwaren-Erstellung muss auf false gesetzt werden, da ansonsten mit 
 			// einem Aufruf sowohl Backwaren- als auch Lebensmittel-Objekte erstellt werden.
 			Lebensmittel.setTrigger(true);
 
-			name = String.format("Lebensmittel%02d", i);
+			name = String.format("Lbm_test%02d", i);
 			gewicht = preis = i;
 			bedarfKuehlung = false;
 			
@@ -44,8 +42,8 @@ public class Lager {
 		}
 
 		// Test-Getraenke erstellen.
-		for (int i=1; i<=ANZAHLWAREN; i++) {
-			name = String.format("Getraenk%02d", i);
+		for (int i=1; i<=anzahlWaren; i++) {
+			name = String.format("Gtr_test%02d", i);
 
 			alkoholgehalt = 0;
 			preis = i;
@@ -60,29 +58,29 @@ public class Lager {
 		}
 
 		// Test-NonFood erstellen.
-		for (int i=1; i<=ANZAHLWAREN; i++) {
-			name = String.format("NonFood%02d", i);
-			beschreibung = String.format("Beschreibung%02d", i);
+		for (int i=1; i<=anzahlWaren; i++) {
+			name = String.format("Nf_test%02d", i);
+			beschreibung = String.format("Nf_beschreibung_test%02d", i);
 
 			preis = i;
 			
 			if (i % 2 == 0)
-				untergruppe = String.format("Kleidung%02d", i);
+				untergruppe = String.format("Nf_kleidung_test%02d", i);
 			else if (i % 3 == 0)
-				untergruppe = String.format("Drogerie%02d", i);
+				untergruppe = String.format("Nf-drogerie_test%02d", i);
 			else
-				untergruppe = String.format("Medien%02d", i);
+				untergruppe = String.format("Nf_medien_test%02d", i);
 
 			// Neues NonFood erstellen.
 			new NonFoodArtikel(name, preis, beschreibung, untergruppe);
 		}
 
-		for (int i=1; i<=ANZAHLWAREN; i++) {
+		for (int i=1; i<=anzahlWaren; i++) {
 			// Trigger auf false, damit KEIN neues Lebensmittel-Objekt in das Array eingefuegt wird,
 			// da ansonsten mit einem Aufruf sowohl Backwaren- als auch Lebensmittel-Objekte erstellt werden.
 			Lebensmittel.setTrigger(false);
 
-			name = String.format("Backware%02d", i);
+			name = String.format("Bw_test%02d", i);
 			gewicht = preis = i;
 			bedarfKuehlung = false;
 			
