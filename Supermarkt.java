@@ -102,14 +102,7 @@ public class Supermarkt {
 		System.out.println("(2) Anzeigen");
 		System.out.println("(3) Nachbestellen");
 		System.out.println("(4) Herausgeben");
-
-		// Anzahl der Auswahlmoeglichkeiten anhand der abteilung variieren. 
-		if (abteilung == "Backwaren") {
-			System.out.println("(5) Aufbacken");
-			input = EinAusgabe.auswahlTreffen(5);
-		} else 
-			input = EinAusgabe.auswahlTreffen(4);
-
+		input = EinAusgabe.auswahlTreffen(4);
 		// Naechstes Abteilungsmenu aufrufen und User-Input uebergeben.
 		aktionUntermenue(input, abteilung);
 	}
