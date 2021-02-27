@@ -107,9 +107,7 @@ public class Supermarkt {
 		System.out.println("(2) Anzeigen");
 		System.out.println("(3) Nachbestellen");
 		System.out.println("(4) Herausgeben");
-
 		input = EinAusgabe.auswahlTreffen(4);
-
 		// Naechstes Abteilungsmenu aufrufen und User-Input uebergeben.
 		aktionUntermenue(input, abteilung);
 	}
