@@ -7,6 +7,7 @@ public abstract class Ware {
 	private double preis;
 	private boolean imBestand;
 	private LocalDate anlegedatum;
+	private int verkaufteMengen;
 
 	// wie viele spezielle Waren pro Abteilung gleichzeitig angelegt sein koennen.
 	public static final int WARENLIMIT = 30;
@@ -23,6 +24,7 @@ public abstract class Ware {
 		this.anzahl = 0;
 		this.imBestand = true;
 		this.anlegedatum = LocalDate.now();
+		this.verkaufteMengen = 0;
 	}
 
 	/**
@@ -51,12 +53,17 @@ public abstract class Ware {
 	public double getPreis() { return this.preis; }
 	public boolean getImBestand() { return this.imBestand; }
 	public LocalDate getAnlegedatum() { return this.anlegedatum; }
+	public int getVerkaufteMengen() { return this.verkaufteMengen; }
 
 	/** Setter-Methoden */
 	public void setAnzahl(int anzahl) { this.anzahl = anzahl; }
 
+	public void erhoeheVerkaufteMenge(int menge) {
+		this.verkaufteMengen += menge;
+	}
 
 	public abstract boolean nachbestellen(int menge, boolean laut);
 
-	public abstract boolean herausgeben(int menge, int slot); 
+	public abstract boolean herausgeben(int menge, int slot, boolean statistik); 
+
 }

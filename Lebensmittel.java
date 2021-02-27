@@ -127,7 +127,7 @@ public class Lebensmittel extends Ware {
 			// Alle abgelaufenen Bestellungen der Ware herausgeben / loeschen.
 			if (nochZuLoeschen > 0) {
 				System.out.println();
-				datenLebensmittel[i][0].herausgeben(nochZuLoeschen, i);
+				datenLebensmittel[i][0].herausgeben(nochZuLoeschen, i, false);
 			}
 
 			if (index >= 0) {
@@ -212,12 +212,11 @@ public class Lebensmittel extends Ware {
 		}
 	}
 
-	public boolean herausgeben(int menge, int slot) {
+	public boolean herausgeben(int menge, int slot, boolean statistik) {
 		int mengeVorHerausgabe = this.getAnzahl();
 		int mengeNachHerausgabe = this.getAnzahl() - menge;
 
 		if (mengeVorHerausgabe >= menge) {
-
 			// Menge in dem Haupt-Objekt der Ware aktualisieren;
 			this.setAnzahl(mengeNachHerausgabe);
 			System.out.printf("Es wurden %d Einheiten %s entfernt. Das Lager hat nun noch %d Einheiten.%n"
@@ -231,6 +230,12 @@ public class Lebensmittel extends Ware {
 			if (antwort.toLowerCase().startsWith("j"))
 				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe, true);
 			return false;
+		}
+
+		// Implementierung des individuellen Anforderungsparts.
+		// Verkauf der Ware der Statistik hinzufuegen.
+		if (statistik) {
+			this.erhoeheVerkaufteMenge(menge);
 		}
 
 		int tempMenge = menge;

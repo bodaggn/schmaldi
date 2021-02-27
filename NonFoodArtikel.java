@@ -99,7 +99,7 @@ public class NonFoodArtikel extends Ware {
 		}
 	}
 
-	public boolean herausgeben(int menge, int slot) {
+	public boolean herausgeben(int menge, int slot, boolean statistik) {
 		int mengeVorHerausgabe = this.getAnzahl();
 		int mengeNachHerausgabe = this.getAnzahl() - menge;
 
@@ -118,6 +118,12 @@ public class NonFoodArtikel extends Ware {
 			if (antwort.toLowerCase().startsWith("j"))
 				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe, false);
 			return false;
+		}
+
+		// Implementierung des individuellen Anforderungsparts.
+		// Verkauf der Ware der Statistik hinzufuegen.
+		if (statistik) {
+			this.erhoeheVerkaufteMenge(menge);
 		}
 
 		int tempMenge = menge;
@@ -161,9 +167,9 @@ public class NonFoodArtikel extends Ware {
 		// Konstruiert den String mit allen relevanten Informationen und uebergibt ihn.
 		return String.format(
 				"%nDer Artikel %s aus der Abteilung NonFood kostet pro Menge %.2f Euro.%n"
-				+ "%s ist Teil der Untergruppe %s. Die Beschreibung lautet:%n\"%s\".%n"
+				+ "%1$s ist Teil der Untergruppe %s. Die Beschreibung lautet:%n\"%s\".%n"
 				+ "Es befinden sich %d Einheiten im Lager."
-				, this.getName(), this.getPreis(), this.getName(), this.untergruppe, this.beschreibung, this.getAnzahl());
+				, this.getName(), this.getPreis(), this.untergruppe, this.beschreibung, this.getAnzahl());
 	}
 
 
