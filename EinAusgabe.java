@@ -108,7 +108,7 @@ public class EinAusgabe {
 	}
 
 	public static void mitEnterBestaetigen() {
-		System.out.print("\nMit \"Enter\" bestaetigen um zurueck zukehren.");
+		System.out.print("\nMit \"Enter\" bestaetigen ...");
 		// gleich zwei mal, weil es so schoen ist. Nein, der Buffer muss erst geleert werden.
 		sc.nextLine();
 		sc.nextLine();

@@ -35,8 +35,7 @@ public class Supermarkt {
 
 	/** Schliesst den Scanner und beendet das Programm. */
 	public static void beenden() {
-		// TODO
-		// EinAusgabe.berechne(String vorgang) // mit Rekursion :D
+		// TODO EinAusgabe.berechne(String vorgang) // mit Rekursion :D
 		EinAusgabe.scannerSchliessen();
 		System.out.println("Programm beendet.");
 		System.exit(0);
@@ -61,6 +60,10 @@ public class Supermarkt {
 
 		// Test-Waren anhand der User-Auswahl erstellen
 		Lager.erstelleLager(anzahlTestWare);
+		System.out.printf(
+				"%n%d spezielle Waren je Abteilung wurden angelegt und auf die maximale Lagerkapazitaet nachbestellt.%n"
+				, anzahlTestWare, Ware.LAGERKAPAZITAET);
+		EinAusgabe.mitEnterBestaetigen();
 		hauptmenue();
 	}
 
@@ -103,12 +106,7 @@ public class Supermarkt {
 		System.out.println("(3) Nachbestellen");
 		System.out.println("(4) Herausgeben");
 
-		// Anzahl der Auswahlmoeglichkeiten anhand der abteilung variieren. 
-		if (abteilung == "Backwaren") {
-			System.out.println("(5) Aufbacken");
-			input = EinAusgabe.auswahlTreffen(5);
-		} else 
-			input = EinAusgabe.auswahlTreffen(4);
+		input = EinAusgabe.auswahlTreffen(4);
 
 		// Naechstes Abteilungsmenu aufrufen und User-Input uebergeben.
 		aktionUntermenue(input, abteilung);
