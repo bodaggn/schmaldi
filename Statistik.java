@@ -5,14 +5,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Comparator;
 
-/**
- * Ordnet alle Waren in einer sortierten Reihenfolge anhand der Verkaufszahlen ein und gibt diese aus.
- * Orientiert anhand dieser Resource:
- * <a href="https://www.delftstack.com/howto/java/how-to-sort-a-map-by-value-in-java/">Resource</a>
- * @param input 1 = absteigend sortiert, 2 = aufsteigend sortiert.
+/** 
+ * Diese Klasse implementiert den individuellen Anforderungsteil.
+ * Es wird eine Rangliste anhand der Verkaufsmengen ausgegeben. Der User kann entscheiden,
+ * ob aufsteigend oder absteigend sortiert werden soll.
+ * @author Louis, Tobi
+ * @version 1.0
  */
 public class Statistik {
 
+	/**
+	 * Ordnet alle Waren in einer sortierten Reihenfolge anhand der Verkaufszahlen ein und gibt diese aus.
+	 * Orientiert anhand dieser Resource:
+	 * <a href="https://www.delftstack.com/howto/java/how-to-sort-a-map-by-value-in-java/">Resource</a>
+	 * @param input 1 = absteigend sortiert, 2 = aufsteigend sortiert.
+	 * @param anzahlStatistik wie viele Elemente in der Liste ausgegeben werden sollen.
+	 */
 	public static void ausgabeStatistik(int input, int anzahlStatistik) {
 
 		Map<String, Integer> warenTabelle = new HashMap<>();

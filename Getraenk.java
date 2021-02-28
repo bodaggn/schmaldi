@@ -1,3 +1,9 @@
+/**
+ * Implementiert alle Funktionalitaeten der Abteilung Getraenke.
+ * Unterklasse von Ware.
+ * @author Louis, Tobi
+ * @version 1.0
+ */
 public class Getraenk extends Ware {
 
 	private double alkoholgehalt;
@@ -5,6 +11,12 @@ public class Getraenk extends Ware {
 	// Insgesamt X verschiedene Arten und X gleichzeitig gelagerte Bestellungen pro Ware moeglich.
 	private static Getraenk datenGetraenk[][] = new Getraenk[WARENLIMIT][LIMITBESTELLUNGEN];
 
+	/**
+	 * Konstruktor
+	 * @param name Name des Getraenks.
+	 * @param preis Preis des Getraenks.
+	 * @param alkoholgehalt Alkoholgehalt des Getraenks.
+	 */
 	public Getraenk(String name, double preis, double alkoholgehalt) {
 		super(EinAusgabe.ersterBuchstabeGross(name), preis);
 		this.alkoholgehalt = alkoholgehalt;
@@ -21,28 +33,35 @@ public class Getraenk extends Ware {
 		}
 	}
 
-	// Bestellung
+	/**
+	 * Minimaler Konstruktor, der aufgerufen wird, wenn neue Bestellungen einer bereits
+	 * vorhandenen Ware getaetigt werden.
+	 * @param anzahl Anzahl der in der Bestellung vorhandenen Ware.
+	 */
 	public Getraenk(int anzahl) {
 		super(anzahl);
 	}
 
-	/**
-	 * Getter fuer Array mit allen Getraenk-Daten.
-	 */
-	public static Getraenk[][] getDatenGetraenk() {
-		return datenGetraenk;
-	}
-
 	/** Getter */
+	public static Getraenk[][] getDatenGetraenk() { return datenGetraenk; }
 	public double getAlkoholgehalt() { return this.alkoholgehalt; }
 
+	/**
+	 * Gibt an, ob das Getraenk alkholhaltig ist oder nicht.
+	 * @return Gibt einen Boolean zurueck, der den Alkoholgehalt bejaht / verneint.
+	 */
 	public boolean istAlkoholhaltig() {
 		if (this.alkoholgehalt > 0)
 			return true;
 		return false;
 	}
 	
-	// Fuer User-Auswahl-Liste gedacht
+	/**
+	 * Gibt eine aufzaehlende Zahl und alle Getraenke aus, sodass diese Methode als
+	 * User-Auswahl benutzt werden kann.
+	 * @param counter Gibt die Anzahl der Optionen - 1 an, die bereits ausgeben wurden.
+	 * @return gibt zurueck wie viele Getraenke ausgegeben wurden - 1.
+	 */
 	public static int gebeGetraenkAus(int counter) {
 		for (int i=0; i<WARENLIMIT; i++) {
 			if (datenGetraenk[i][0] == null) {
@@ -55,7 +74,12 @@ public class Getraenk extends Ware {
 		return counter-1;
 	}
 
-	// Fuer User-Auswahl-Liste gedacht
+	/**
+	 * Gibt eine aufzaehlende Zahl und alle nicht-alkoholischen Getraenke aus,
+	 * sodass diese Methode als User-Auswahl benutzt werden kann.
+	 * @param counter Gibt die Anzahl der Optionen - 1 an, die bereits ausgeben wurden.
+	 * @return gibt zurueck wie viele nicht-alkoholische Getraenke ausgegeben wurden - 1.
+	 */
 	public static int gebeNonAlkGetraenkAus(int counter) {
 		for (int i=0; i<WARENLIMIT; i++) {
 			if (datenGetraenk[i][0] == null) {
@@ -69,6 +93,13 @@ public class Getraenk extends Ware {
 		return counter-1;
 	}
 
+	/**
+	 * Implementiert das Nachbestellen des darauf angewandten Waren-Objekts.
+	 * Ruft waehrend der Laufzeit die Methode bestellungHinzufuegen auf.
+	 * @param menge Menge, die nachbestellt werden soll.
+	 * @param laut Soll bestaetigt werden, dass nachbestellt worden ist?
+	 * @return Gibt an, ob der Vorgang erfolgreich abgeschlossen wurde.
+	 */
 	public boolean nachbestellen(int menge, boolean laut) {
 		// Hilfsvariablen
 		int mengeVorBestellung = this.getAnzahl();
@@ -99,9 +130,9 @@ public class Getraenk extends Ware {
 
 	/**
 	 * Erstellt ein neues Bestell-Objekt und reiht es an der richtigen Stelle
-	 * im zwei-dimensionalen Getraenk-Array ein.
+	 * im zwei-dimensionalen Getraenke-Array ein.
+	 * @param menge Menge, die der jeweiligen Bestellung hinzugefuegt werden soll.
 	 */
-	// TODO: Check, falls alle Slots frei sind einbauen?
 	public void bestellungHinzufuegen(int menge) {
 		// Hilfsvariablen
 		String gesuchtesGetraenk = this.getName();
@@ -121,8 +152,15 @@ public class Getraenk extends Ware {
 		}
 	}
 
-
-
+	/**
+	 * Implementiert das Herausgeben, also den Verkauf des darauf angewandten Waren-Objekts.
+	 * Loescht alle Bestellungen deren Anzahl durch diese Methode auf 0 gesetzt wird und 
+	 * verschiebt alle Bestellungen nach links wenn welche geloescht wurden.
+	 * @param menge Menge, die herausgegeben werden soll.
+	 * @param slot Index der behandelten Ware in dem jeweiligen Daten-Array.
+	 * @param statistik Entscheidet, ob dieser Vorgang in die Statistik einfliessen soll.
+	 * @return Gibt an, ob der Vorgang erfolgreich abgeschlossen wurde.
+	 */
 	public boolean herausgeben(int menge, int slot, boolean statistik) {
 		int mengeVorHerausgabe = this.getAnzahl();
 		int mengeNachHerausgabe = this.getAnzahl() - menge;
@@ -186,6 +224,11 @@ public class Getraenk extends Ware {
 		return true;
 	}
 
+	/**
+	 * Gibt einen String zurueck, der alle wichtigen Informationen zu der jeweiligen Ware beinhaltet.
+	 * Kann anschliessend im Benutzermenue aufgerufen werden. Ueberschreibt die String.toString() Methode.
+	 * @return Formatierter String mit Informationen zur Ware.
+	 */
 	@Override
 	public String toString() {
 		// Hilfsvariable

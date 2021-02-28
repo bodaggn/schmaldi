@@ -1,12 +1,11 @@
 import java.util.Random;
 
-/* Diese Klasse soll Methoden zum Erstellen/Nachbestellen/Ausgeben... aller möglichen
-Warenarten beinhalten. Diese Methoden sollen den Nutzer des Programms nach den
-Angaben fragen und dann mithilfe der zuvor beschriebenen Klassen die Funktionalität implementieren.
-
-Erstellen Sie weitere Methoden, welche der Strukturierung des Benutzer-Menüs helfen.
-*/
-
+/**
+ * Diese Klasse enthaelt Methoden zum Erstellen/Nachbestellen/Ausgeben aller möglichen Warenarten.
+ * Ausserdem uebernimmt sie die Funktion der Benutzerfuehrung und des "Engine" zugleich.
+ * @author Louis, Tobi
+ * @version 1.0
+ */
 public class Supermarkt {
 
 	/* ---------------------------------------------- */
@@ -18,8 +17,10 @@ public class Supermarkt {
 	private static final int AUSWAHLANZAHLHAUPTMENUE = AuswahlHauptmenue.values().length;
 
 	private static String marktname;
+	// Speichert den Input, wie viele Waren in der Statistik ausgegeben werden sollen.
 	private static int anzahlStatistik;
 
+	/** Weisst der Klassenvariable marktname den Namen fuer diese Laufzeit zu. */
 	private static void marktnameErzeugen() {
 		String[] moeglicheNamen = {"Schmaldi", "Schmedeka", "Schmnetto"};
 
@@ -27,6 +28,7 @@ public class Supermarkt {
 		marktname = moeglicheNamen[new Random().nextInt(moeglicheNamen.length)];
 	}
 
+	/** Optionen im Hauptmenue */
 	public enum AuswahlHauptmenue {
 		BEENDEN,
 		LEBENSMITTEL,
@@ -36,10 +38,15 @@ public class Supermarkt {
 		STATISTIK
 	}
 
+	/**
+	 * Gibt eine Trennleiste aus, die den Namen des aktuellen Menues beinhalten soll.
+	 * @param inhalt Name des aktuellen Menues.
+	 */
 	public static void trennleiste(String inhalt) {
 		System.out.printf("%n------- %s -------%n%n", inhalt);
 	}
 
+	/** Start des Engine und des Benutzermenues. */
 	public static void einloggen() {
 		// Dem Markt jede Laufzeit einen neuen Namen geben. :D
 		marktnameErzeugen();
@@ -87,6 +94,7 @@ public class Supermarkt {
 		System.exit(0);
 	}
 
+	/** Punkt Hauptmenue in der Benutzerfuehrung. */
 	public static void hauptmenue() {
 		EinAusgabe.ausgabeZuruecksetzen();
 		trennleiste("Hauptmenue");
@@ -121,6 +129,10 @@ public class Supermarkt {
 		}
 	}
 
+	/**
+	 * Standard-Optionen in der Benutzerfuehrung.
+	 * @param abteilung Gibt an in welcher Abteilung das naechste Untermenue aufgerufen wird.
+	 */
 	public static void untermenueStandard(String abteilung) {
 		EinAusgabe.ausgabeZuruecksetzen();
 		trennleiste(String.format("Abteilung: %s", abteilung));
@@ -137,6 +149,10 @@ public class Supermarkt {
 		aktionUntermenue(input, abteilung);
 	}
 
+	/**
+	 * Untermenue Statistik in der Benutzerfuehrung.
+	 * @param abteilung Gibt an in welcher Abteilung das naechste Untermenue aufgerufen wird.
+	 */
 	public static void untermenueStatistik(String abteilung) {
 		EinAusgabe.ausgabeZuruecksetzen();
 		trennleiste(String.format("Abteilung: %s", abteilung));
@@ -149,7 +165,7 @@ public class Supermarkt {
 
 		while (true) {
 			anzahlStatistik = EinAusgabe.eingabeInt("Wie viele verschiedene Waren sollen maximal aufgelistet werden?");
-			if (anzahlStatistik > 0 && anzahlStatistik <= Ware.WARENLIMIT * 4)
+			if (anzahlStatistik >= 0 && anzahlStatistik <= Ware.WARENLIMIT * 4)
 				break;
 			System.out.printf("%nEs ist nur eine Auswahl zwischen 0 und dem Gesamtwarenlimit von %d moeglich.%n", Ware.WARENLIMIT * 4);
 		}
@@ -160,6 +176,11 @@ public class Supermarkt {
 		aktionUntermenue(input, abteilung);
 	}
 
+	/**
+	 * Filtert den Userinput und ruft die nachfolgende Methode auf.
+	 * @param input Userinput aus dem vorherigen Schritt wird angenommen.
+	 * @param abteilung Gibt an in welcher Abteilung das naechste Untermenue aufgerufen wird.
+	 */
 	public static void aktionUntermenue(int input, String abteilung) {
 		// Zurueck ins Hauptmenue.
 		if (input == 0)
@@ -291,6 +312,10 @@ public class Supermarkt {
 
 	}
 
+	/**
+	 * Standard-Optionen in der Benutzerfuehrung.
+	 * @param abteilung Gibt an in welcher Abteilung die folgenden Funktionen operieren.
+	 */
 	public static void auswahlWarenStandard(String abteilung) {
 		System.out.println("(0) Zurueck");
 		System.out.printf("(1) Alle %s%n", abteilung);
@@ -325,7 +350,11 @@ public class Supermarkt {
 
 	}
 
-	// Punkt 1
+	/**
+	 * Implementiert das Neu-Anlegen von Waren fuer jede Abteilung
+	 * anhand von User-Abfragen und den jeweiligen Methoden in den Waren-Klassen. 
+	 * @param abteilung In welcher Abteilung wir uns befinden.
+	 */
 	public static void neuAnlegen(String abteilung) {
 		System.out.println("Hier kannst du neue Ware in das Sortiment aufnehmen.");
 
@@ -415,7 +444,6 @@ public class Supermarkt {
 			new Backware(name, preis, gewicht, haltbarkeit, kuehlung);
 		}
 
-		// TODO hier Ladezeit mit Rekursion simulieren.
 		EinAusgabe.rechenzeitSimulieren("Lege neue Ware an");
 		System.out.printf("%nNeues %s %s erfolgreich angelegt und automatisch %d Einheiten bestellt.%n"
 				, abteilung, name, Ware.LAGERKAPAZITAET);
@@ -424,7 +452,11 @@ public class Supermarkt {
 		untermenueStandard(abteilung);
 	}
 
-	// Punkt 2
+	/**
+	 * Implementiert das Anzeigen von Waren fuer jede Abteilung mit Hilfe der jeweiligen Methoden in den Waren-Klassen. 
+	 * @param abteilung In welcher Abteilung wir uns befinden.
+	 * @param input Vorheriger User-Input wird an diese Methode uebergeben.
+	 */
 	public static void anzeigenWare(String abteilung, int input) {
 		if (input == 0) {
 			untermenueStandard(abteilung);
@@ -622,10 +654,15 @@ public class Supermarkt {
 		}
 
 		EinAusgabe.mitEnterBestaetigen();
+		// Zurueck zum letzten Schritt
 		aktionUntermenue(2, abteilung);
 	}
 
-	//Punkt 3
+	/**
+	 * Implementiert das Nachbestellen von Waren fuer jede Abteilung mit Hilfe der jeweiligen Methoden in den Waren-Klassen. 
+	 * @param abteilung In welcher Abteilung wir uns befinden.
+	 * @param input Vorheriger User-Input wird an diese Methode uebergeben.
+	 */
 	public static void nachbestellenWare(String abteilung, int input) {
 
 		if (input == 0) {
@@ -734,7 +771,11 @@ public class Supermarkt {
 		aktionUntermenue(3, abteilung);
 	}
 
-	//Punkt 4
+	/**
+	 * Implementiert das Herausgeben von Waren fuer jede Abteilung mit Hilfe der jeweiligen Methoden in den Waren-Klassen. 
+	 * @param abteilung In welcher Abteilung wir uns befinden.
+	 * @param input Vorheriger User-Input wird an diese Methode uebergeben.
+	 */
 	public static void herausgebenWare(String abteilung, int input) {
 		if (input == 0) {
 			untermenueStandard(abteilung);
@@ -795,9 +836,14 @@ public class Supermarkt {
 	/* ------ Main-Funktion ------ */
 	/* -------------------------- */
 
+	/** 
+	 * Main-Funktion
+	 * @param args nicht benutzt
+	 */
 	public static void main(String[] args) {
 
 		// Start des Engine
 		einloggen();
 	}
+
 }

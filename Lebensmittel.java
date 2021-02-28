@@ -1,18 +1,18 @@
-// TODO
-// toString implementieren.
-// Am Ende checken, ob es auch auf dem Rechner des Anderen laueft!
-//
-// zwei dimensionales Array nach Schema 
-// [Banane] [[1 Objekt mit Banane Bestellung 1 als Name], [...]]]
-// [Kirsche] [[Array mit Elementen der ersten Bestellung], [...]]]
-// oder das innere Array fasst eine Bestellung zusammen, da ansonsten Millionen Objekte existieren.
-
 import java.time.LocalDate;
 import java.time.Period;
 
+/** 
+ * Implementiert alle Funktionalitaeten der Abteilung Lebensmittel.
+ * Unterklasse von Ware.
+ * @author Louis, Tobi
+ * @version 1.0
+ */
 public class Lebensmittel extends Ware {
 
-	// TODO private?
+	/* Objektattribute, die weitere Funktionalitaeten in Verbindung mit den hier
+	 * implementierten Methoden bereitstellen.
+	 * Werden an die Klasse Backwaren direkt vererbt, sodass ebenfalls vererbte Methoden
+	 * auf diese Zugriff haben. */
 	protected double gewicht;
 	protected int haltbarkeit;
 	protected boolean bedarfKuehlung;
@@ -22,12 +22,24 @@ public class Lebensmittel extends Ware {
 
 	// Schaltet den Hinzufuege-Vorgang zum Array fuer Lebensmittel aus,
 	// sollte der Konstruktor ueber eine erbende Klasse aufgerufen werden.
-	// Sonst haetten wa quasi gleich zwei Waren erstellt. ;)
 	private static boolean trigger = true;
 
-	/** Setter fuer den Trigger, der erbenden Klassen zur Verfuegung steht. */
+	/**
+	 * Setter fuer den Trigger, der erbenden Klassen zur Verfuegung steht,
+	 * sodass nicht versehentlich mehre Objekte gleichzeitig in ihre jeweiligen Daten-Arrays
+	 * eingelagert werden. Wenn eine neue Backware erstellt wird, wird dies auf "false" gesetzt.
+	 * @param wert bestimmt ob ein Lebensmittel-Objekt eingelagert werden soll oder nicht.
+	 */
 	protected static void setTrigger(boolean wert) { trigger = wert; }
 
+	/**
+	 * Konstruktor
+	 * @param name Name des Lebensmittels.
+	 * @param preis Preis des Lebensmittels.
+	 * @param gewicht Gewicht des Lebensmittel.
+	 * @param haltbarkeit Haltbarkeit des Lebensmittel in Tagen.
+	 * @param bedarfKuehlung Boolean, ob das Lebensmittel gekuehlt werden muss.
+	 */
 	public Lebensmittel(String name, double preis, double gewicht, int haltbarkeit, boolean bedarfKuehlung) {
 		super(EinAusgabe.ersterBuchstabeGross(name), preis);
 		this.gewicht = gewicht;
@@ -51,24 +63,36 @@ public class Lebensmittel extends Ware {
 
 	}
 
-	// Bestellung
+	/**
+	 * Minimaler Konstruktor, der aufgerufen wird, wenn neue Bestellungen einer bereits
+	 * vorhandenen Ware getaetigt werden.
+	 * @param anzahl Anzahl der in der Bestellung vorhandenen Ware.
+	 * @param haltbarkeit Haltbarkeit der Ware in Tagen.
+	 */
 	public Lebensmittel(int anzahl, int haltbarkeit) {
 		super(anzahl);
 		this.haltbarkeit = haltbarkeit;
 	}
 
-	// Kurzes MHD
+	/**
+	 * Minimaler Konstruktor um ein Objekt zu erzeugen, dass die Anzahl der geringfuegig
+	 * haltbaren jeweiligen speziellen Lebensmittel beinhaltet.
+	 * @param name Name der Ware.
+	 * @param anzahl Anzahl der Ware.
+	 */
 	public Lebensmittel(String name, int anzahl) {
 		super(name, anzahl);
 	}
 
-	/**
-	 * Getter fuer Array mit allen Lebensmittel-Daten.
-	 */
+	/** Getter fuer das Array mit allen Lebensmittel-Daten. */
 	public static Lebensmittel[][] getDatenLebensmittel() {
 		return datenLebensmittel;
 	}
 
+	/**
+	 * Berechnet das Mindesthalbarkeitsdatum und gibt es als formatierten String zurueck.
+	 * @return MHD als String.
+	 */
 	public String haltbarBis() {
 		LocalDate mhd = this.getAnlegedatum().plusDays(this.haltbarkeit);
 		return EinAusgabe.datumFormatiert(mhd);
@@ -76,7 +100,7 @@ public class Lebensmittel extends Ware {
 
 	/**
 	 * Gibt die Anzahl der Tage zwischen jetzt und MHD als Integer zurueck.
-	 * @return Differenz der Tage als Integer. -1, falls ein ueberschritten
+	 * @return Differenz der Tage als Integer. -1, falls ein ueberschritten.
 	 */
 	public int istHaltbar() {
 		LocalDate mhd = this.getAnlegedatum().plusDays(this.haltbarkeit);
@@ -89,6 +113,11 @@ public class Lebensmittel extends Ware {
 			return -1;
 	}
 
+	/**
+	 * Generiert eine neues Array, dass alle Lebensmittel beinhaltet, die ein MHD
+	 * von 0 - 2 Tagen haben und loescht alle Bestellungen, die ein negatives MHD haben.
+	 * @return Das erzeugte und befuellte Lebensmittel-Array.
+	 */
 	public static Lebensmittel[] kurzesMHD() {
 		// Lebensmittel Array, der zurueck gegeben wird.
 		// Groesse anhand von aktuellen Programmeinstellungen berechnet.
@@ -142,7 +171,12 @@ public class Lebensmittel extends Ware {
 		return rueckgabeArray;
 	}
 
-	// Fuer User-Auswahl-Liste gedacht
+	/**
+	 * Gibt eine aufzaehlende Zahl und alle Lebensmittel aus, sodass diese Methode als
+	 * User-Auswahl benutzt werden kann.
+	 * @param counter Gibt die Anzahl der Optionen - 1 an, die bereits ausgeben wurden.
+	 * @return gibt zurueck wie viele Lebensmittel ausgegeben wurden - 1.
+	 */
 	public static int gebeLebensmittelAus(int counter) {
 		for (int i=0; i<WARENLIMIT; i++) {
 			if (datenLebensmittel[i][0] == null) {
@@ -155,6 +189,13 @@ public class Lebensmittel extends Ware {
 		return counter-1;
 	}
 
+	/**
+	 * Implementiert das Nachbestellen des darauf angewandten Waren-Objekts.
+	 * Ruft waehrend der Laufzeit die Methode bestellungHinzufuegen auf.
+	 * @param menge Menge, die nachbestellt werden soll.
+	 * @param laut Soll bestaetigt werden, dass nachbestellt worden ist?
+	 * @return Gibt an, ob der Vorgang erfolgreich abgeschlossen wurde.
+	 */
 	public boolean nachbestellen(int menge, boolean laut) {
 		// Hilfsvariablen
 		int mengeVorBestellung = this.getAnzahl();
@@ -189,8 +230,8 @@ public class Lebensmittel extends Ware {
 	/**
 	 * Erstellt ein neues Bestell-Objekt und reiht es an der richtigen Stelle
 	 * im zwei-dimensionalen Lebensmittel-Array ein.
+	 * @param menge Menge, die der jeweiligen Bestellung hinzugefuegt werden soll.
 	 */
-	// TODO: Check, falls alle Slots frei sind einbauen?
 	public void bestellungHinzufuegen(int menge) {
 		// Hilfsvariablen
 		String gesuchtesLebensmittel = this.getName();
@@ -212,6 +253,16 @@ public class Lebensmittel extends Ware {
 		}
 	}
 
+	/**
+	 * Implementiert das Herausgeben, also den Verkauf des darauf angewandten Waren-Objekts.
+	 * Loescht alle Bestellungen deren Anzahl durch diese Methode auf 0 gesetzt wird und 
+	 * verschiebt alle Bestellungen nach links wenn welche geloescht wurden.
+	 * Wir leben in einer Supermarkt-Utopie, in der immer die aeltesten Waren herausgegeben werden.
+	 * @param menge Menge, die herausgegeben werden soll.
+	 * @param slot Index der behandelten Ware in dem jeweiligen Daten-Array.
+	 * @param statistik Entscheidet, ob dieser Herausgabe-Vorgang mit in die Statistik einfliessen soll.
+	 * @return Gibt an, ob der Vorgang erfolgreich abgeschlossen wurde.
+	 */
 	public boolean herausgeben(int menge, int slot, boolean statistik) {
 		int mengeVorHerausgabe = this.getAnzahl();
 		int mengeNachHerausgabe = this.getAnzahl() - menge;
@@ -274,6 +325,11 @@ public class Lebensmittel extends Ware {
 		return true;
 	}
 
+	/**
+	 * Gibt einen String zurueck, der alle wichtigen Informationen zu der jeweiligen Ware beinhaltet.
+	 * Kann anschliessend im Benutzermenue aufgerufen werden. Ueberschreibt die String.toString() Methode.
+	 * @return Formatierter String mit Informationen zur Ware.
+	 */
 	@Override
 	public String toString() {
 		// Benoetigt um nach Bedarf ein "nicht" bei "Bedarf Kuehlung" in den String einzufuegen.

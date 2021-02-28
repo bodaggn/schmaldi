@@ -1,3 +1,9 @@
+/**
+ * Implementiert alle Funktionalitaeten der Abteilung Lebensmittel.
+ * Unterklasse von Lebensmittel und Ware.
+ * @author Louis, Tobi
+ * @version 1.0
+ */
 public class Backware extends Lebensmittel {
 
 	private boolean gebacken;
@@ -5,6 +11,14 @@ public class Backware extends Lebensmittel {
 	// Insgesamt X verschiedene Arten und X gleichzeitig gelagerte Bestellungen pro Ware moeglich.
 	private static Backware datenBackware[][] = new Backware[WARENLIMIT][LIMITBESTELLUNGEN];
 
+	/**
+	 * Konstruktor
+	 * @param name Name der Backware.
+	 * @param preis Preis der Backware
+	 * @param gewicht Gewicht der Backware.
+	 * @param haltbarkeit Haltbarkeit der Backware in Tagen.
+	 * @param bedarfKuehlung Boolean, ob die Backware gekuehlt werden muss.
+	 */
 	public Backware(String name, double preis, double gewicht, int haltbarkeit, boolean bedarfKuehlung) {
 		super(name, preis, gewicht, haltbarkeit, bedarfKuehlung);
 		this.gebacken = false;
@@ -21,23 +35,39 @@ public class Backware extends Lebensmittel {
 		}
 	}
 	
-	// Bestellung
+	/**
+	 * Minimaler Konstruktor, der aufgerufen wird, wenn neue Bestellungen einer bereits
+	 * vorhandenen Ware getaetigt werden.
+	 * @param anzahl Anzahl der in der Bestellung vorhandenen Ware.
+	 * @param haltbarkeit Haltbarkeit der Ware in Tagen.
+	 */
 	public Backware(int anzahl, int haltbarkeit) {
 		super(anzahl, haltbarkeit);
 	}
 
-	// Kurzes MHD
+	/**
+	 * Minimaler Konstruktor um ein Objekt zu erzeugen, dass die Anzahl der geringfuegig
+	 * haltbaren jeweiligen speziellen Lebensmittel beinhaltet.
+	 * @param name Name der Ware.
+	 * @param anzahl Anzahl der Ware.
+	 */
 	public Backware(String name, int anzahl) {
 		super(name, anzahl);
 	}
 
 	/**
 	 * Getter fuer Array mit allen Backwaren-Daten.
+	 * @return gibt den Daten-Array zurueck.
 	 */
 	public static Backware[][] getDatenBackware() {
 		return datenBackware;
 	}
 
+	/**
+	 * Backt alle speziellen Backwaren auf, sofern dies noch nicht geschehen ist
+	 * und gibt den aktuellen Status aus.
+	 * @return gibt an, ob die Waren bereits aufgebacken waren oder dies gerade werden.
+	 */
 	public boolean backeWare() {
 		// bereits gebacken.
 		if (this.gebacken) {
@@ -50,6 +80,11 @@ public class Backware extends Lebensmittel {
 		}
 	}
 
+	/**
+	 * Generiert eine neues Array, dass alle Backwaren beinhaltet, die ein MHD
+	 * von 0 - 2 Tagen haben und loescht alle Bestellungen, die ein negatives MHD haben.
+	 * @return Das erzeugte und befuellte Backwaren-Array.
+	 */
 	public static Backware[] kurzesMHD() {
 		// Backwaren Array, der zurueck gegeben wird.
 		// Groesse anhand von aktuellen Programmeinstellungen berechnet.
@@ -104,7 +139,12 @@ public class Backware extends Lebensmittel {
 		return rueckgabeArray;
 	}
 
-	// Fuer User-Auswahl-Liste gedacht
+	/**
+	 * Gibt eine aufzaehlende Zahl und alle Backwaren aus, sodass diese Methode als
+	 * User-Auswahl benutzt werden kann.
+	 * @param counter Gibt die Anzahl der Optionen - 1 an, die bereits ausgeben wurden.
+	 * @return gibt zurueck wie viele Backwaren ausgegeben wurden - 1.
+	 */
 	public static int gebeBackwarenAus(int counter) {
 		for (int i=0; i<WARENLIMIT; i++) {
 			if (datenBackware[i][0] == null) {
@@ -120,7 +160,8 @@ public class Backware extends Lebensmittel {
 
 	/**
 	 * Erstellt ein neues Bestell-Objekt und reiht es an der richtigen Stelle
-	 * im zwei-dimensionalen Backwaren-Array ein.
+	 * im zwei-dimensionalen Lebensmittel-Array ein.
+	 * @param menge Menge, die der jeweiligen Bestellung hinzugefuegt werden soll.
 	 */
 	@Override
 	public void bestellungHinzufuegen(int menge) {
@@ -144,6 +185,16 @@ public class Backware extends Lebensmittel {
 		}
 	}
 
+	/**
+	 * Implementiert das Herausgeben, also den Verkauf des darauf angewandten Waren-Objekts.
+	 * Loescht alle Bestellungen deren Anzahl durch diese Methode auf 0 gesetzt wird und 
+	 * verschiebt alle Bestellungen nach links wenn welche geloescht wurden.
+	 * @param menge Menge, die herausgegeben werden soll.
+	 * @param slot Index der behandelten Ware in dem jeweiligen Daten-Array.
+	 * @param aufbackenPruefen Entscheidet, ob der Aufbackstatus geprueft werden muss.
+	 * @param statistik Entscheidet, ob dieser Vorgang in die Statistik einfliessen soll.
+	 * @return Gibt an, ob der Vorgang erfolgreich abgeschlossen wurde.
+	 */
 	public boolean herausgeben(int menge, int slot, boolean aufbackenPruefen, boolean statistik) {
 
 		// Folgende Abfrage ueberspringen, wenn Aufbacken-Ueberpruefung nicht gewuenscht.
@@ -220,6 +271,11 @@ public class Backware extends Lebensmittel {
 		return true;
 	}
 
+	/**
+	 * Gibt einen String zurueck, der alle wichtigen Informationen zu der jeweiligen Ware beinhaltet.
+	 * Kann anschliessend im Benutzermenue aufgerufen werden. Ueberschreibt die String.toString() Methode.
+	 * @return Formatierter String mit Informationen zur Ware.
+	 */
 	@Override
 	public String toString() {
 		// Benoetigt um nach Bedarf ein "nicht" bei "Bedarf Kuehlung" in den String einzufuegen.

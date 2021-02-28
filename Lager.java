@@ -1,16 +1,27 @@
-// TODO erklaeren, dass hier Haltbarkeit -1 moeglich ist
+/**
+ * Diese Klasse erstellt Testwaren aller Abteilungen, die zum Pruefen des Gesamtsystems geeignet sind,
+ * da ebenfalls Werte eingetragen werden, die durch eine User-Eingabe waehrend der Laufzeit nicht 
+ * reproduzierbar sind, da diese abgefangen werden.
+ * @author Louis, Tobi
+ * @version 1.0
+ */
 public class Lager {
 
 	/**
 	 * Erstellt jeweils eine bestimmte Anzahl Waren fuer jede Abteilung.
+	 *
+	 * Wichtig! Zu Testzwecken werden auch negative Haltbarkeiten erstellt, die ansonsten bei der User-Eingabe
+	 * abgefangen werden wuerden. Hierdurch lassen sich die Mindesthalbarkeits-Methoden testen.
+	 *
 	 * Die Namen laufen nach folgendem Schema:
-	 * Lebensmittel01, Lebensmittel02, ...
-	 * Getraenk01, Getraenk02 ...
+	 * Fuer Lebensmittel = Lbm_test01, Lbm_test02, ...
+	 * Fuer Getraenke = Gtr_test01, Gtr_test02, ...
+	 * ...
 	 * Die Attribute werden automatisch variiert.
-	 * Zu Testzwecken werden auch negative Haltbarkeiten erstellt, die ansonsten bei der User-Eingabe
-	 * abgefangen werden. Hierdurch lassen sich die Mindesthalbarkeits-Methoden testen.
+	 * @param anzahlWaren wie viele Waren pro Abteilung angelegt werden sollen.
 	 */
 	public static void erstelleLager(int anzahlWaren) {
+		// Deklaration aller Parameter, die an die Konstruktoren uebergeben werden.
 		String name, beschreibung, untergruppe;
 		double preis, gewicht;
 		int haltbarkeit, alkoholgehalt;

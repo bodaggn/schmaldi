@@ -1,3 +1,9 @@
+/**
+ * Implementiert alle Funktionalitaeten der Abteilung NonFoodArtikel.
+ * Unterklasse von Ware.
+ * @author Louis, Tobi
+ * @version 1.0
+ */
 public class NonFoodArtikel extends Ware {
 
 	private String beschreibung, untergruppe;
@@ -5,6 +11,13 @@ public class NonFoodArtikel extends Ware {
 	// Insgesamt X verschiedene Arten und X gleichzeitig gelagerte Bestellungen pro Ware moeglich.
 	private static NonFoodArtikel datenNonFoodArtikel[][] = new NonFoodArtikel[WARENLIMIT][LIMITBESTELLUNGEN];
 
+	/**
+	 * Konstruktor
+	 * @param name Name des NonFood-Artikels.
+	 * @param preis Preis des NonFood-Artikels.
+	 * @param beschreibung Beschreibung des NonFood-Artikels.
+	 * @param untergruppe Untergruppe des NonFood-Artikels.
+	 */
 	public NonFoodArtikel(String name, double preis, String beschreibung, String untergruppe) {
 		super(EinAusgabe.ersterBuchstabeGross(name), preis);
 		this.beschreibung = beschreibung;
@@ -22,19 +35,26 @@ public class NonFoodArtikel extends Ware {
 		}
 	}
 
-	// Bestellung
+	/**
+	 * Minimaler Konstruktor, der aufgerufen wird, wenn neue Bestellungen einer bereits
+	 * vorhandenen Ware getaetigt werden.
+	 * @param anzahl Anzahl der in der Bestellung vorhandenen Ware.
+	 */
 	public NonFoodArtikel(int anzahl) {
 		super(anzahl);
 	}
 
-	/**
-	 * Getter fuer Array mit allen NonFoodArtikel-Daten.
-	 */
+	/** Getter fuer Array mit allen NonFoodArtikel-Daten.  */
 	public static NonFoodArtikel[][] getDatenNonFoodArtikel() {
 		return datenNonFoodArtikel;
 	}
 
-	// Fuer User-Auswahl-Liste gedacht
+	/**
+	 * Gibt eine aufzaehlende Zahl und alle NonFoodArtikel aus, sodass diese Methode als
+	 * User-Auswahl benutzt werden kann.
+	 * @param counter Gibt die Anzahl der Optionen - 1 an, die bereits ausgeben wurden.
+	 * @return gibt zurueck wie viele NonFoodArtikel ausgegeben wurden - 1.
+	 */
 	public static int gebeNFArtikelAus(int counter) {
 		for (int i=0; i<WARENLIMIT; i++) {
 			if (datenNonFoodArtikel[i][0] == null) {
@@ -47,6 +67,13 @@ public class NonFoodArtikel extends Ware {
 		return counter-1;
 	}
 
+	/**
+	 * Implementiert das Nachbestellen des darauf angewandten Waren-Objekts.
+	 * Ruft waehrend der Laufzeit die Methode bestellungHinzufuegen auf.
+	 * @param menge Menge, die nachbestellt werden soll.
+	 * @param laut Soll bestaetigt werden, dass nachbestellt worden ist?
+	 * @return Gibt an, ob der Vorgang erfolgreich abgeschlossen wurde.
+	 */
 	public boolean nachbestellen(int menge, boolean laut) {
 		// Hilfsvariablen
 		int mengeVorBestellung = this.getAnzahl();
@@ -77,9 +104,9 @@ public class NonFoodArtikel extends Ware {
 
 	/**
 	 * Erstellt ein neues Bestell-Objekt und reiht es an der richtigen Stelle
-	 * im zwei-dimensionalen NonFoodArtikel-Array ein.
+	 * im zwei-dimensionalen NonFood-Array ein.
+	 * @param menge Menge, die der jeweiligen Bestellung hinzugefuegt werden soll.
 	 */
-	// TODO: Check, falls alle Slots frei sind einbauen?
 	public void bestellungHinzufuegen(int menge) {
 		// Hilfsvariablen
 		String gesuchterNonFoodArtikel = this.getName();
@@ -99,6 +126,15 @@ public class NonFoodArtikel extends Ware {
 		}
 	}
 
+	/**
+	 * Implementiert das Herausgeben, also den Verkauf des darauf angewandten Waren-Objekts.
+	 * Loescht alle Bestellungen deren Anzahl durch diese Methode auf 0 gesetzt wird und 
+	 * verschiebt alle Bestellungen nach links wenn welche geloescht wurden.
+	 * @param menge Menge, die herausgegeben werden soll.
+	 * @param slot Index der behandelten Ware in dem jeweiligen Daten-Array.
+	 * @param statistik Entscheidet, ob dieser Vorgang in die Statistik einfliessen soll.
+	 * @return Gibt an, ob der Vorgang erfolgreich abgeschlossen wurde.
+	 */
 	public boolean herausgeben(int menge, int slot, boolean statistik) {
 		int mengeVorHerausgabe = this.getAnzahl();
 		int mengeNachHerausgabe = this.getAnzahl() - menge;
@@ -162,6 +198,11 @@ public class NonFoodArtikel extends Ware {
 		return true;
 	}
 
+	/**
+	 * Gibt einen String zurueck, der alle wichtigen Informationen zu der jeweiligen Ware beinhaltet.
+	 * Kann anschliessend im Benutzermenue aufgerufen werden. Ueberschreibt die String.toString() Methode.
+	 * @return Formatierter String mit Informationen zur Ware.
+	 */
 	@Override
 	public String toString() {
 		// Konstruiert den String mit allen relevanten Informationen und uebergibt ihn.
