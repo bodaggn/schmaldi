@@ -164,6 +164,7 @@ public class Supermarkt {
 		input = EinAusgabe.auswahlTreffen(2);
 
 		while (true) {
+			if (input == 0) {hauptmenue();}
 			anzahlStatistik = EinAusgabe.eingabeInt("Wie viele verschiedene Waren sollen maximal aufgelistet werden?");
 			if (anzahlStatistik >= 0 && anzahlStatistik <= Ware.WARENLIMIT * 4)
 				break;
