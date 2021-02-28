@@ -123,7 +123,7 @@ public class Getraenk extends Ware {
 
 
 
-	public boolean herausgeben(int menge, int slot) {
+	public boolean herausgeben(int menge, int slot, boolean statistik) {
 		int mengeVorHerausgabe = this.getAnzahl();
 		int mengeNachHerausgabe = this.getAnzahl() - menge;
 
@@ -142,6 +142,12 @@ public class Getraenk extends Ware {
 			if (antwort.toLowerCase().startsWith("j"))
 				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe, true);
 			return false;
+		}
+
+		// Implementierung des individuellen Anforderungsparts.
+		// Verkauf der Ware der Statistik hinzufuegen.
+		if (statistik) {
+			this.erhoeheVerkaufteMenge(menge);
 		}
 
 		int tempMenge = menge;
@@ -188,8 +194,8 @@ public class Getraenk extends Ware {
 		// Konstruiert den String mit allen relevanten Informationen und uebergibt ihn.
 		return String.format(
 				"%nEine Menge %s aus der Abteilung Getraenke kostet %.2f Euro.%n"
-				+ "%s ist mit %.2f Promille%s alkoholhaltig. Es befinden sich %d Einheiten im Lager."
-				, this.getName(), this.getPreis(), this.getName(), this.alkoholgehalt, alkoholgehaltJaNein, this.getAnzahl());
+				+ "%1$s ist mit %.2f Promille%s alkoholhaltig. Es befinden sich %d Einheiten im Lager."
+				, this.getName(), this.getPreis(), this.alkoholgehalt, alkoholgehaltJaNein, this.getAnzahl());
 	}
 
 }

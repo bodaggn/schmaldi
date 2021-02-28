@@ -15,7 +15,6 @@ public class Backware extends Lebensmittel {
 				continue;
 			datenBackware[i][0] = this;
 			
-			// TODO das hier weg System.out.println();
 			// Maximal Menge direkt bestellen
 			datenBackware[i][0].nachbestellen(LAGERKAPAZITAET, false);
 			break;
@@ -42,11 +41,11 @@ public class Backware extends Lebensmittel {
 	public boolean backeWare() {
 		// bereits gebacken.
 		if (this.gebacken) {
-			System.out.printf("Die komplette Ware %s ist bereits aufgebacken.", this.getName());
+			System.out.printf("Die komplette Ware %s ist bereits aufgebacken.%n", this.getName());
 			return false;
 		// noch nicht gebacken.
 		} else {
-			System.out.printf("Die Ware %s wird aufgebacken. Einen Moment bitte.", this.getName());
+			System.out.printf("Die Ware %s wird aufgebacken. Einen Moment bitte.%n", this.getName());
 			return true;
 		}
 	}
@@ -145,7 +144,7 @@ public class Backware extends Lebensmittel {
 		}
 	}
 
-	public boolean herausgeben(int menge, int slot, boolean aufbackenPruefen) {
+	public boolean herausgeben(int menge, int slot, boolean aufbackenPruefen, boolean statistik) {
 
 		// Folgende Abfrage ueberspringen, wenn Aufbacken-Ueberpruefung nicht gewuenscht.
 		if (aufbackenPruefen) {
@@ -166,17 +165,23 @@ public class Backware extends Lebensmittel {
 
 			// Menge in dem Haupt-Objekt der Ware aktualisieren;
 			this.setAnzahl(mengeNachHerausgabe);
-			System.out.printf("Es wurden %d Einheiten %s entfernt. Das Lager hat nun noch %d Einheiten.%n"
+			System.out.printf("Es wurden %3d Einheiten %s entfernt. Das Lager hat nun noch %3d Einheiten.%n"
 					, menge, this.getName(), this.getAnzahl());
 		} else {
 			System.out.printf("Es sind nicht mehr genuegend Einheiten %s auf Lager.%n", this.getName());
 			String antwort = EinAusgabe.eingabeString(String.format(
-						"Moechtest du das Lager fuer %s komplett auf %d Einheiten aufstocken?%n"
+						"Moechtest du das Lager fuer %s komplett auf %3d Einheiten aufstocken?%n"
 						+ "Ja / Nein" , this.getName(), LAGERKAPAZITAET));
 			System.out.println();
 			if (antwort.toLowerCase().startsWith("j"))
 				this.nachbestellen(LAGERKAPAZITAET - mengeVorHerausgabe, true);
 			return false;
+		}
+
+		// Implementierung des individuellen Anforderungsparts.
+		// Verkauf der Ware der Statistik hinzufuegen.
+		if (statistik) {
+			this.erhoeheVerkaufteMenge(menge);
 		}
 
 		int tempMenge = menge;

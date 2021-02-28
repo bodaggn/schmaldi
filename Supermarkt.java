@@ -26,7 +26,8 @@ public class Supermarkt {
 		LEBENSMITTEL,
 		GETRAENKE,
 		NONFOOD,
-		BACKWAREN
+		BACKWAREN,
+		STATISTIK
 	}
 
 	public static void trennleiste(String inhalt) {
@@ -78,7 +79,7 @@ public class Supermarkt {
 		}
 
 		// User-Input
-		int input = EinAusgabe.auswahlTreffen(4);
+		int input = EinAusgabe.auswahlTreffen(5);
 		// Nachfolgendes Untermenue anhand der Auswahl aufrufen.
 		switch(input) {
 			case 0:
@@ -95,20 +96,41 @@ public class Supermarkt {
 			case 4:
 				untermenueStandard("Backwaren");
 				break;
+			case 5:
+				untermenueStatistik("Statistik");
+				break;
 		}
 	}
 
 	public static void untermenueStandard(String abteilung) {
-		int input;
+
 		EinAusgabe.clearScreen();
+
 		trennleiste(String.format("Abteilung: %s", abteilung));
 		System.out.println("(0) Zurueck");
 		System.out.println("(1) Anlegen");
 		System.out.println("(2) Anzeigen");
 		System.out.println("(3) Nachbestellen");
 		System.out.println("(4) Herausgeben");
+
+		int input;
 		input = EinAusgabe.auswahlTreffen(4);
-		// Naechstes Abteilungsmenu aufrufen und User-Input uebergeben.
+
+		// Naechstes Abteilungsmenue aufrufen und User-Input uebergeben.
+		aktionUntermenue(input, abteilung);
+	}
+
+	public static void untermenueStatistik(String abteilung) {
+		trennleiste(String.format("Abteilung: %s", abteilung));
+		System.out.println("(0) Zurueck");
+		System.out.println("(1) Meistverkaufte Waren");
+		System.out.println("(2) Am wenigsten verkaufte Waren");
+
+		int input;
+		input = EinAusgabe.auswahlTreffen(2);
+
+		// Naechstes Menue aufrufen und User-Input uebergeben.
+
 		aktionUntermenue(input, abteilung);
 	}
 
@@ -224,6 +246,23 @@ public class Supermarkt {
 				auswahl = EinAusgabe.auswahlTreffen(Backware.gebeBackwarenAus(1)); 
 				herausgebenWare(abteilung, auswahl);
 			}
+		}
+
+		else if (abteilung == "Statistik") {
+			if (input == 1) {
+				trennleiste("Meistverkaufte Waren");
+			} 
+			else if (input == 2) {
+				trennleiste("Am wenigsten verkaufte Waren");
+			}
+
+			// TODO Hier nochn Input, sodass der User eingeben kann wie viele Waren ausgegeben werden sollen.
+			// TODO Ansonsten wird man bisschen zugespammt. :D
+			// Ausgabe der sortierten Warenauflistung.
+			Statistik.ausgabeStatistik(input);
+
+			// Zurueck zum vorherigen Menue.
+			untermenueStatistik(abteilung);
 		}
 
 	}
@@ -345,15 +384,14 @@ public class Supermarkt {
 				if (haltbarkeit > 0)
 					break;
 				System.out.println("\nDie Haltbarkeit muss groesser als 0 sein!");
-			
+			}
 			boolean kuehlung =  EinAusgabe.eingabeBoolean("Ist eine Kuehlung notwendig? Format = true / false");
 			// trigger auf false setzen, damit nicht auch ein Lebensmittel-Objekt erstellt wird.
 			Lebensmittel.setTrigger(false);
 			// neue Backware erstellen.
 			new Backware(name, preis, gewicht, haltbarkeit, kuehlung);
-			}
-
 		}
+
 		// TODO hier Ladezeit mit Rekursion simulieren.
 		System.out.printf("%nNeues %s %s erfolgreich angelegt und automatisch %d Einheiten bestellt.%n"
 				, abteilung, name, Ware.LAGERKAPAZITAET);
@@ -383,7 +421,7 @@ public class Supermarkt {
 					if (daten[i][0] == null)
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -403,7 +441,7 @@ public class Supermarkt {
 				for (int i=0; i<arrayKurzesMHD.length; i++) {
 					if (arrayKurzesMHD[i] == null)
 						break;
-					System.out.printf("Von der Ware %s sind %d Einheiten mit MHD zwischen 0 und 2 Tagen eingelagert.%n"
+					System.out.printf("Von der Ware %s sind %3d Einheiten mit MHD zwischen 0 und 2 Tagen eingelagert.%n"
 							, arrayKurzesMHD[i].getName(), arrayKurzesMHD[i].getAnzahl());
 				}
 			// ausfuehrliche Informationen fuer einzeln ausgewaehlte Lebensmittel ausgeben.
@@ -418,7 +456,7 @@ public class Supermarkt {
 					ware = daten[input-3][i];
 					// einzelne Bestellungen des jeweiligen Lebensmittels ausgeben.
 					System.out.printf(
-							"%s vom %s mit noch %d eingelagerten Einheiten. MHD = %s, noch %d Tage.%n", ware.getName()
+							"%s vom %s mit noch %3d eingelagerten Einheiten. MHD = %s, noch %d Tage.%n", ware.getName()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum())
 							, ware.getAnzahl(), ware.haltbarBis(), ware.istHaltbar());
 				}
@@ -437,7 +475,7 @@ public class Supermarkt {
 					if (daten[i][0] == null)
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -451,7 +489,7 @@ public class Supermarkt {
 					if (daten[i][0].istAlkoholhaltig())
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -468,7 +506,7 @@ public class Supermarkt {
 					ware = daten[input-3][i];
 					// einzelne Bestellungen des jeweiligen Getraenk ausgeben.
 					System.out.printf(
-							"%s vom %s mit noch %d eingelagerten Einheiten.%n"
+							"%s vom %s mit noch %3d eingelagerten Einheiten.%n"
 							, ware.getName(), EinAusgabe.datumFormatiert(ware.getAnlegedatum()), ware.getAnzahl());
 				}
 			}	
@@ -485,7 +523,7 @@ public class Supermarkt {
 					if (daten[i][0] == null)
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -501,7 +539,7 @@ public class Supermarkt {
 					ware = daten[input-2][i];
 					// einzelne Bestellungen des jeweiligen NonFoodArtikel ausgeben.
 					System.out.printf(
-							"%s vom %s mit noch %d eingelagerten Einheiten.%n", ware.getName()
+							"%s vom %s mit noch %3d eingelagerten Einheiten.%n", ware.getName()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()), ware.getAnzahl());
 				}
 			}	
@@ -518,7 +556,7 @@ public class Supermarkt {
 					if (daten[i][0] == null)
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -538,7 +576,7 @@ public class Supermarkt {
 				for (int i=0; i<arrayKurzesMHD.length; i++) {
 					if (arrayKurzesMHD[i] == null)
 						break;
-					System.out.printf("Von der Ware %s sind %d Einheiten mit MHD zwischen 0 und 2 Tagen eingelagert.%n"
+					System.out.printf("Von der Ware %s sind %3d Einheiten mit MHD zwischen 0 und 2 Tagen eingelagert.%n"
 							, arrayKurzesMHD[i].getName(), arrayKurzesMHD[i].getAnzahl());
 				}
 			// ausfuehrliche Informationen fuer einzeln ausgewaehlte Backwaren ausgeben.
@@ -553,7 +591,7 @@ public class Supermarkt {
 					ware = daten[input-3][i];
 					// einzelne Bestellungen der jeweiligen Backwaren ausgeben.
 					System.out.printf(
-							"%s vom %s mit noch %d eingelagerten Einheiten. MHD = %s, noch %d Tage.%n", ware.getName()
+							"%s vom %s mit noch %3d eingelagerten Einheiten. MHD = %s, noch %d Tage.%n", ware.getName()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum())
 							, ware.getAnzahl(), ware.haltbarBis(), ware.istHaltbar());
 				}
@@ -698,7 +736,7 @@ public class Supermarkt {
 		if (abteilung == "Lebensmittel") {
 			Lebensmittel[][] daten = Lebensmittel.getDatenLebensmittel(); 
 			// Herausgeben-Funktion aus der Klasse Lebensmittel auf das ausgewaehlte Lebensmittel anwenden.
-			if (daten[input-1][0].herausgeben(menge, input-1))
+			if (daten[input-1][0].herausgeben(menge, input-1, true))
 					System.out.println("Verkauf erfolgreich im System gespeichert.");
 				else
 					System.out.println("Verkauf voerst abgebrochen. Bitte erneut versuchen.");
@@ -706,7 +744,7 @@ public class Supermarkt {
 		else if (abteilung == "Getraenke") {
 			Getraenk[][] daten = Getraenk.getDatenGetraenk(); 
 			// Herausgeben-Funktion aus der Klasse Getraenk auf das ausgewaehlte Getraenk anwenden.
-			if (daten[input-1][0].herausgeben(menge, input-1))
+			if (daten[input-1][0].herausgeben(menge, input-1, true))
 					System.out.println("Verkauf erfolgreich im System gespeichert.");
 				else
 					System.out.println("Verkauf voerst abgebrochen. Bitte erneut versuchen.");
@@ -714,7 +752,7 @@ public class Supermarkt {
 		else if (abteilung == "NonFood") {
 			NonFoodArtikel[][] daten = NonFoodArtikel.getDatenNonFoodArtikel(); 
 			// Herausgeben-Funktion aus der Klasse NonFoodArtikel auf das ausgewaehlte NonFood anwenden.
-			if (daten[input-1][0].herausgeben(menge, input-1))
+			if (daten[input-1][0].herausgeben(menge, input-1, true))
 					System.out.println("Verkauf erfolgreich im System gespeichert.");
 				else
 					System.out.println("Verkauf voerst abgebrochen. Bitte erneut versuchen.");
@@ -722,7 +760,7 @@ public class Supermarkt {
 		else if (abteilung == "Backwaren") {
 			Backware[][] daten = Backware.getDatenBackware(); 
 			// Herausgeben-Funktion aus der Klasse Backware auf die ausgewaehlte Backware anwenden.
-			if (daten[input-1][0].herausgeben(menge, input-1, true))
+			if (daten[input-1][0].herausgeben(menge, input-1, true, true))
 					System.out.println("Verkauf erfolgreich im System gespeichert.");
 				else
 					System.out.println("Verkauf voerst abgebrochen. Bitte erneut versuchen.");
@@ -738,6 +776,7 @@ public class Supermarkt {
 	/* -------------------------- */
 
 	public static void main(String[] args) {
+
 		// Start des Engine
 		einloggen();
 	}
