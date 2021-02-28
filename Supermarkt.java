@@ -1,12 +1,11 @@
+import java.util.Random;
+
 /* Diese Klasse soll Methoden zum Erstellen/Nachbestellen/Ausgeben... aller möglichen
 Warenarten beinhalten. Diese Methoden sollen den Nutzer des Programms nach den
 Angaben fragen und dann mithilfe der zuvor beschriebenen Klassen die Funktionalität implementieren.
 
 Erstellen Sie weitere Methoden, welche der Strukturierung des Benutzer-Menüs helfen.
 */
-
-// TODO
-// Verabschiedungsmethode schliesst den Scanner
 
 public class Supermarkt {
 
@@ -18,8 +17,15 @@ public class Supermarkt {
 	// um eine moegliche Erweiterung zu erleichtern.
 	private static final int AUSWAHLANZAHLHAUPTMENUE = AuswahlHauptmenue.values().length;
 
-	// TODO
 	private static String marktname;
+	private static int anzahlStatistik;
+
+	private static void marktnameErzeugen() {
+		String[] moeglicheNamen = {"Schmaldi", "Schmedeka", "Schmnetto"};
+
+		// weisst den neuen Namen zufaellig anhand eines Array-Elements zu.
+		marktname = moeglicheNamen[new Random().nextInt(moeglicheNamen.length)];
+	}
 
 	public enum AuswahlHauptmenue {
 		BEENDEN,
@@ -34,19 +40,16 @@ public class Supermarkt {
 		System.out.printf("%n------- %s -------%n%n", inhalt);
 	}
 
-	/** Schliesst den Scanner und beendet das Programm. */
-	public static void beenden() {
-		// TODO EinAusgabe.berechne(String vorgang) // mit Rekursion :D
-		EinAusgabe.scannerSchliessen();
-		System.out.println("Programm beendet.");
-		System.exit(0);
-	}
-
 	public static void einloggen() {
-		trennleiste("Login");
-		System.out.println("Willkommen!\nBitte logge dich ein.\n");
+		// Dem Markt jede Laufzeit einen neuen Namen geben. :D
+		marktnameErzeugen();
 
-		// User um Auswahl der Testwarenanzahl bitten.
+		// Formatierte Trennleiste als Ueberschrift ausgeben.
+		trennleiste("Begruessung und Import");
+
+		System.out.printf("Willkommen bei %s!%n%n", marktname);
+
+		// User um Auswahl der zu importierenden Testwarenanzahl bitten.
 		System.out.println("Moechtest du sporadisch benannte Testware importieren?");
 		System.out.printf("Wenn Ja, dann gib bitte die gewuenschte Anzahl bis max. %d an.%n", Ware.WARENLIMIT);
 		System.out.println("Wenn Nein, dann gib bitte die \"0\" an.");
@@ -59,6 +62,10 @@ public class Supermarkt {
 				break;
 		}
 
+		// Rechenzeit schoen simulieren.
+		if (anzahlTestWare > 0) 
+			EinAusgabe.rechenzeitSimulieren("Testware wird angelegt");
+
 		// Test-Waren anhand der User-Auswahl erstellen
 		Lager.erstelleLager(anzahlTestWare);
 		System.out.printf(
@@ -68,8 +75,20 @@ public class Supermarkt {
 		hauptmenue();
 	}
 
+	/** Schliesst den Scanner und beendet das Programm. */
+	public static void beenden() {
+		// Scanner schliessen.
+		EinAusgabe.scannerSchliessen();
+
+		EinAusgabe.rechenzeitSimulieren(String.format(
+		"%s-Drive Backup erstellen", marktname));
+
+		System.out.println("Programm beendet.");
+		System.exit(0);
+	}
+
 	public static void hauptmenue() {
-		EinAusgabe.clearScreen();
+		EinAusgabe.ausgabeZuruecksetzen();
 		trennleiste("Hauptmenue");
 		System.out.println("Bitte waehle die Abteilung aus.");
 		// Gibt die Enum Elemente als korrekt formatierte Auswahlmoeglichkeiten aus.
@@ -103,9 +122,7 @@ public class Supermarkt {
 	}
 
 	public static void untermenueStandard(String abteilung) {
-
-		EinAusgabe.clearScreen();
-
+		EinAusgabe.ausgabeZuruecksetzen();
 		trennleiste(String.format("Abteilung: %s", abteilung));
 		System.out.println("(0) Zurueck");
 		System.out.println("(1) Anlegen");
@@ -121,6 +138,7 @@ public class Supermarkt {
 	}
 
 	public static void untermenueStatistik(String abteilung) {
+		EinAusgabe.ausgabeZuruecksetzen();
 		trennleiste(String.format("Abteilung: %s", abteilung));
 		System.out.println("(0) Zurueck");
 		System.out.println("(1) Meistverkaufte Waren");
@@ -129,8 +147,16 @@ public class Supermarkt {
 		int input;
 		input = EinAusgabe.auswahlTreffen(2);
 
-		// Naechstes Menue aufrufen und User-Input uebergeben.
+		while (true) {
+			anzahlStatistik = EinAusgabe.eingabeInt("Wie viele verschiedene Waren sollen maximal aufgelistet werden?");
+			if (anzahlStatistik > 0 && anzahlStatistik <= Ware.WARENLIMIT * 4)
+				break;
+			System.out.printf("%nEs ist nur eine Auswahl zwischen 0 und dem Gesamtwarenlimit von %d moeglich.%n", Ware.WARENLIMIT * 4);
+		}
 
+		EinAusgabe.rechenzeitSimulieren("Durchsuche die \"Datenbank\"");
+
+		// Naechstes Menue aufrufen und User-Input uebergeben.
 		aktionUntermenue(input, abteilung);
 	}
 
@@ -140,7 +166,7 @@ public class Supermarkt {
 			hauptmenue();
 
 		//trennleiste(String.format("Abteilung: %s", abteilung));
-		EinAusgabe.clearScreen();
+		EinAusgabe.ausgabeZuruecksetzen();
 		// naechsten Optionen darlegen und Userauswahl aufnehmen,
 		// z.B. welche Waren will ich anlegen, bestellen, anzeigen, etc.
 		int auswahl;
@@ -171,7 +197,6 @@ public class Supermarkt {
 		}
 
 		else if (abteilung == "Getraenke") {
-			// TODO Aufgabenstellung beachten, und eine Fehlermeldung ausgeben wenn ueber Warenlimit!
 			if (input == 1) {
 				trennleiste(String.format("Anlegen: %s", abteilung));
 				neuAnlegen(abteilung);
@@ -256,10 +281,9 @@ public class Supermarkt {
 				trennleiste("Am wenigsten verkaufte Waren");
 			}
 
-			// TODO Hier nochn Input, sodass der User eingeben kann wie viele Waren ausgegeben werden sollen.
-			// TODO Ansonsten wird man bisschen zugespammt. :D
 			// Ausgabe der sortierten Warenauflistung.
-			Statistik.ausgabeStatistik(input);
+			Statistik.ausgabeStatistik(input, anzahlStatistik);
+			EinAusgabe.mitEnterBestaetigen();
 
 			// Zurueck zum vorherigen Menue.
 			untermenueStatistik(abteilung);
@@ -303,7 +327,6 @@ public class Supermarkt {
 
 	// Punkt 1
 	public static void neuAnlegen(String abteilung) {
-		EinAusgabe.clearScreen();
 		System.out.println("Hier kannst du neue Ware in das Sortiment aufnehmen.");
 
 		// Falls Warenlimit fuer die Abteilung erreicht ist.
@@ -393,6 +416,7 @@ public class Supermarkt {
 		}
 
 		// TODO hier Ladezeit mit Rekursion simulieren.
+		EinAusgabe.rechenzeitSimulieren("Lege neue Ware an");
 		System.out.printf("%nNeues %s %s erfolgreich angelegt und automatisch %d Einheiten bestellt.%n"
 				, abteilung, name, Ware.LAGERKAPAZITAET);
 		// Zurueck zur Abteilung.
@@ -405,7 +429,6 @@ public class Supermarkt {
 		if (input == 0) {
 			untermenueStandard(abteilung);
 		}
-		EinAusgabe.clearScreen();
 		// alle Waren ausgewaehlt.
 		if (input == 1)
 			System.out.println("\nFuer genauere Informationen bitte die jeweilige Ware auswaehlen.\n");
@@ -421,7 +444,7 @@ public class Supermarkt {
 					if (daten[i][0] == null)
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -441,7 +464,7 @@ public class Supermarkt {
 				for (int i=0; i<arrayKurzesMHD.length; i++) {
 					if (arrayKurzesMHD[i] == null)
 						break;
-					System.out.printf("Von der Ware %s sind %3d Einheiten mit MHD zwischen 0 und 2 Tagen eingelagert.%n"
+					System.out.printf("Von der Ware %s sind %d Einheiten mit MHD zwischen 0 und 2 Tagen eingelagert.%n"
 							, arrayKurzesMHD[i].getName(), arrayKurzesMHD[i].getAnzahl());
 				}
 			// ausfuehrliche Informationen fuer einzeln ausgewaehlte Lebensmittel ausgeben.
@@ -456,7 +479,7 @@ public class Supermarkt {
 					ware = daten[input-3][i];
 					// einzelne Bestellungen des jeweiligen Lebensmittels ausgeben.
 					System.out.printf(
-							"%s vom %s mit noch %3d eingelagerten Einheiten. MHD = %s, noch %d Tage.%n", ware.getName()
+							"%s vom %s mit noch %d eingelagerten Einheiten. MHD = %s, noch %d Tage.%n", ware.getName()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum())
 							, ware.getAnzahl(), ware.haltbarBis(), ware.istHaltbar());
 				}
@@ -475,7 +498,7 @@ public class Supermarkt {
 					if (daten[i][0] == null)
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -489,7 +512,7 @@ public class Supermarkt {
 					if (daten[i][0].istAlkoholhaltig())
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -506,7 +529,7 @@ public class Supermarkt {
 					ware = daten[input-3][i];
 					// einzelne Bestellungen des jeweiligen Getraenk ausgeben.
 					System.out.printf(
-							"%s vom %s mit noch %3d eingelagerten Einheiten.%n"
+							"%s vom %s mit noch %d eingelagerten Einheiten.%n"
 							, ware.getName(), EinAusgabe.datumFormatiert(ware.getAnlegedatum()), ware.getAnzahl());
 				}
 			}	
@@ -523,7 +546,7 @@ public class Supermarkt {
 					if (daten[i][0] == null)
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -539,7 +562,7 @@ public class Supermarkt {
 					ware = daten[input-2][i];
 					// einzelne Bestellungen des jeweiligen NonFoodArtikel ausgeben.
 					System.out.printf(
-							"%s vom %s mit noch %3d eingelagerten Einheiten.%n", ware.getName()
+							"%s vom %s mit noch %d eingelagerten Einheiten.%n", ware.getName()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()), ware.getAnzahl());
 				}
 			}	
@@ -556,7 +579,7 @@ public class Supermarkt {
 					if (daten[i][0] == null)
 						continue;
 					ware = daten[i][0];
-					System.out.printf("Die Ware %s ist mit %3d Einheiten eingelagert. Im Bestand seit %s.%n"
+					System.out.printf("Die Ware %s ist mit %d Einheiten eingelagert. Im Bestand seit %s.%n"
 							, ware.getName(), ware.getAnzahl()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum()));
 				}
@@ -576,7 +599,7 @@ public class Supermarkt {
 				for (int i=0; i<arrayKurzesMHD.length; i++) {
 					if (arrayKurzesMHD[i] == null)
 						break;
-					System.out.printf("Von der Ware %s sind %3d Einheiten mit MHD zwischen 0 und 2 Tagen eingelagert.%n"
+					System.out.printf("Von der Ware %s sind %d Einheiten mit MHD zwischen 0 und 2 Tagen eingelagert.%n"
 							, arrayKurzesMHD[i].getName(), arrayKurzesMHD[i].getAnzahl());
 				}
 			// ausfuehrliche Informationen fuer einzeln ausgewaehlte Backwaren ausgeben.
@@ -591,14 +614,14 @@ public class Supermarkt {
 					ware = daten[input-3][i];
 					// einzelne Bestellungen der jeweiligen Backwaren ausgeben.
 					System.out.printf(
-							"%s vom %s mit noch %3d eingelagerten Einheiten. MHD = %s, noch %d Tage.%n", ware.getName()
+							"%s vom %s mit noch %d eingelagerten Einheiten. MHD = %s, noch %d Tage.%n", ware.getName()
 							, EinAusgabe.datumFormatiert(ware.getAnlegedatum())
 							, ware.getAnzahl(), ware.haltbarBis(), ware.istHaltbar());
 				}
 			}	
 		}
+
 		EinAusgabe.mitEnterBestaetigen();
-		// TODO Hier Wartezeit simulieren?
 		aktionUntermenue(2, abteilung);
 	}
 
@@ -608,7 +631,6 @@ public class Supermarkt {
 		if (input == 0) {
 			untermenueStandard(abteilung);
 		}
-		EinAusgabe.clearScreen();
 		int menge;
 		while (true) {
 			menge = EinAusgabe.eingabeInt("Wie viel moechtest du bestellen?");
@@ -717,7 +739,6 @@ public class Supermarkt {
 		if (input == 0) {
 			untermenueStandard(abteilung);
 		}
-		EinAusgabe.clearScreen();
 		// Herausgabeversuch von einer Menge groesser als der Lagerkapazitaet direkt beanstanden.
 		int menge;
 		while (true) {
@@ -765,7 +786,6 @@ public class Supermarkt {
 				else
 					System.out.println("Verkauf voerst abgebrochen. Bitte erneut versuchen.");
 		}
-		// TODO Wartezeit simulieren
 		EinAusgabe.mitEnterBestaetigen();
 		// Zurueck zum letzten Schritt nach Abarbeitung.
 		aktionUntermenue(4, abteilung);

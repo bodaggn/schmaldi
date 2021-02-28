@@ -13,7 +13,7 @@ import java.util.Comparator;
  */
 public class Statistik {
 
-	public static void ausgabeStatistik(int input) {
+	public static void ausgabeStatistik(int input, int anzahlStatistik) {
 
 		Map<String, Integer> warenTabelle = new HashMap<>();
 
@@ -60,8 +60,15 @@ public class Statistik {
 		else 
 			list.sort(Entry.comparingByValue());
 
-		// Die Zeile war ein bisschen Fummelarbeit bis es geklappt hat. :D
-		 list.forEach((i) -> System.out.printf("%4d Einheiten verkauft von %s%n",  i.getValue(), i.getKey()));
+		// Rangliste ausgeben und abbrechen, sollten gar nicht genug Waren vorhanden sein
+		// fuer die vom User gewollte Warenanzahl, die in die Auflistung mit aufgenommen werden sollte.
+		try {
+			for (int i=0; i<anzahlStatistik; i++) {
+				System.out.printf("%4d Einheiten verkauft von %s%n",  list.get(i).getValue(), list.get(i).getKey());
+			}
+		} catch (IndexOutOfBoundsException e) {
+			// abbrechen
+		}
 	}
 
 }

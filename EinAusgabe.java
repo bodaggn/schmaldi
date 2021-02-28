@@ -109,7 +109,7 @@ public class EinAusgabe {
 	}
 
 	public static void mitEnterBestaetigen() {
-		System.out.print("\nMit \"Enter\" bestaetigen ...");
+		System.out.print("\nDruecke \"Enter\" zum bestaetigen.");
 		// gleich zwei mal, weil es so schoen ist. Nein, der Buffer muss erst geleert werden.
 		sc.nextLine();
 		sc.nextLine();
@@ -123,14 +123,40 @@ public class EinAusgabe {
 		DateTimeFormatter f = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
 		return f.format(datum);
     }
-	public static void clearScreen(){
-		//Clears Screen in java
+
+	public static void ausgabeZuruecksetzen(){
 		try {
+			// Implementation fuer Windows
 			if (System.getProperty("os.name").contains("Windows"))
 				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+			// Implementation fuer Linux
 			else
 				System.out.print("\033\143");
-		} catch (IOException | InterruptedException ex) {}
+		} catch (IOException | InterruptedException ex) {
+			// diese gesammte Funktionalitaet ueberspringen, sollte ein Fehler auftreten.
+		}
 	}
+
+	public static void rechenzeitSimulieren(String text) {
+		System.out.printf("%n%s ", text);
+
+		// rekursive Methode aufrufen und IE auffangen.
+		try {
+			zeichnePunkte(3);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		// Leerzeile
+		System.out.println();
+	}
+
+	public static void zeichnePunkte(int n) throws InterruptedException {
+		if (n > 0) {
+			System.out.print(".");
+			Thread.sleep(850);
+			zeichnePunkte(n - 1);
+		} 
+	}
+
 
 }
